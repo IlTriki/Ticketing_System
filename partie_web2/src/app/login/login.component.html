@@ -1,0 +1,7 @@
+<div id="container" [formGroup]="form">
+    <h1>Page de connexion</h1>
+    <input type="text" formControlName="username" placeholder="Nom d'utilisateur"/>
+    <input type="password" formControlName="password" placeholder="Mot de passe"/>
+    
+    <button (click)="login()" [disabled]="!form.valid">Login</button>
+</div>
