@@ -3,5 +3,6 @@
     <input type="text" formControlName="username" placeholder="Nom d'utilisateur"/>
     <input type="password" formControlName="password" placeholder="Mot de passe"/>
     
-    <button (click)="login()" [disabled]="!form.valid">Login</button>
+    <button id="login" (click)="login()" [disabled]="!form.valid">Login</button>
+    <button id="forgotPassword" type="button" (click)="forgotPassword()">Mot de passe oublié</button>
 </div>
