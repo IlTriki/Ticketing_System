@@ -25,4 +25,7 @@ export class LoginComponent {
       }
     });
   }
+  forgotPassword() {
+    this.router.navigateByUrl('/forgot-password');
+  }
 }
