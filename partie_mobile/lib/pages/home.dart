@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:partie_mobile/models/programme_model.dart';
+import 'package:partie_mobile/models/bottomnav_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class HomePage extends StatefulWidget {
@@ -28,17 +29,14 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F5F5),
+      backgroundColor: const Color(0xFFFFFFFF),
       appBar: _appBar(),
-      body: Column(
-        children: [
-          const SizedBox(
-            height: 20,
-          ),
-          _programmes(),
-        ],
+      body: Container(
+        padding:
+            const EdgeInsets.only(top: 20), // Adjust the top padding as needed
+        child: _programmes(),
       ),
-      bottomNavigationBar: _bottomNavigationBar(),
+      bottomNavigationBar: CustomBottomNavigationBar.buildBottomNavigationBar(),
     );
   }
 
@@ -63,58 +61,67 @@ class _HomePageState extends State<HomePage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(
-          height: MediaQuery.of(context).size.height * 0.78,
+          height: MediaQuery.of(context).size.height * 0.792,
           child: ListView.separated(
               itemCount: programmes.length,
               padding: const EdgeInsets.only(
                 bottom: 30,
                 right: 30,
                 left: 30,
+                top: 20,
               ),
               separatorBuilder: (context, index) => const SizedBox(
                     height: 25,
                   ),
               itemBuilder: (context, index) {
                 return Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(15),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.3),
-                          spreadRadius: 5,
-                          blurRadius: 7,
-                        ),
-                      ],
-                    ),
-                    child: Stack(children: [
-                      Row(
-                        children: [
-                          SvgPicture.asset(
-                            programmes[index].priorite,
-                            width: screenWidth * 0.035,
-                            height: screenWidth * 0.035,
-                          ),
-                          SizedBox(width: screenWidth * 0.01),
-                          Text(
-                            programmes[index].horaire,
-                            style: TextStyle(
-                              fontWeight: FontWeight.w400,
-                              color: const Color(0xFF8F9BB3),
-                              fontSize: screenWidth * 0.035,
-                            ),
-                          )
-                        ],
+                  height: 100,
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.3),
+                        spreadRadius: 5,
+                        blurRadius: 7,
                       ),
-                      Positioned(
+                    ],
+                  ),
+                  child: Stack(children: [
+                    Positioned(
                         top: 0,
-                        right: 0,
-                        child: SvgPicture.asset('assets/icons/options.svg',
-                            width: screenWidth * 0.010,
-                            height: screenWidth * 0.010),
-                      ),
-                      Row(
+                        left: 0,
+                        child: Row(
+                          children: [
+                            SvgPicture.asset(
+                              programmes[index].priorite,
+                              width: screenWidth * 0.035,
+                              height: screenWidth * 0.035,
+                            ),
+                            SizedBox(width: screenWidth * 0.01),
+                            Text(
+                              programmes[index].horaire,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                color: const Color(0xFF8F9BB3),
+                                fontSize: screenWidth * 0.035,
+                              ),
+                            )
+                          ],
+                        )),
+                    Positioned(
+                      top: 0,
+                      right: 0,
+                      child: SvgPicture.asset('assets/icons/options.svg',
+                          width: screenWidth * 0.010,
+                          height: screenWidth * 0.010),
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      left: 0,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -122,7 +129,7 @@ class _HomePageState extends State<HomePage> {
                               Text(
                                 programmes[index].nom,
                                 style: TextStyle(
-                                  fontWeight: FontWeight.w600,
+                                  fontWeight: FontWeight.w900,
                                   color: Colors.black,
                                   fontSize: screenWidth * 0.04,
                                 ),
@@ -137,46 +144,21 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ],
                           ),
-                          const Spacer(),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              SvgPicture.asset('assets/icons/boutonGo.svg',
-                                  width: screenWidth * 0.35)
-                            ],
-                          )
                         ],
-                      )
-                    ]));
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: SvgPicture.asset('assets/icons/boutonGo.svg',
+                          width: screenWidth * 0.10,
+                          height: screenWidth * 0.10),
+                    ),
+                  ]),
+                );
               }),
         ),
       ],
     );
-  }
-
-  BottomNavigationBar _bottomNavigationBar() {
-    return BottomNavigationBar(backgroundColor: Colors.white, items: const [
-      BottomNavigationBarItem(
-        icon: Icon(
-          Icons.home,
-          color: Color(0xFF1A73E8),
-        ),
-        label: 'Accueil',
-      ),
-      BottomNavigationBarItem(
-        icon: Icon(
-          Icons.calendar_today,
-          color: Colors.black,
-        ),
-        label: 'Programme',
-      ),
-      BottomNavigationBarItem(
-        icon: Icon(
-          Icons.person,
-          color: Colors.black,
-        ),
-        label: 'Profil',
-      ),
-    ]);
   }
 }
