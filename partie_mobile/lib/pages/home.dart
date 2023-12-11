@@ -30,22 +30,25 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFFFFFFF),
-      appBar: _appBar(),
       body: Container(
-        padding:
-            const EdgeInsets.only(top: 20), // Adjust the top padding as needed
+        padding: const EdgeInsets.only(top: 20),
         child: _programmes(),
       ),
-      bottomNavigationBar: CustomBottomNavigationBar.buildBottomNavigationBar(),
+      bottomNavigationBar:
+          CustomBottomNavigationBar.buildBottomNavigationBar(0, context),
     );
   }
 
-  AppBar _appBar() {
-    return AppBar(
-      backgroundColor: Colors.white,
-      elevation: 0.0,
-      centerTitle: true,
-      title: Text(
+  Container _title() {
+    return Container(
+      color: Colors.white,
+      alignment: Alignment.center,
+      margin: const EdgeInsets.only(top: 20),
+      padding: const EdgeInsets.only(
+        top: 20,
+        bottom: 20,
+      ),
+      child: Text(
         'Programme du jour',
         style: TextStyle(
           color: Colors.black,
@@ -60,6 +63,7 @@ class _HomePageState extends State<HomePage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        _title(),
         SizedBox(
           height: MediaQuery.of(context).size.height * 0.792,
           child: ListView.separated(

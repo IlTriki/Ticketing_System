@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:partie_mobile/pages/connexion.dart';
 import 'package:partie_mobile/pages/home.dart';
 
 void main() {
@@ -14,7 +15,7 @@ class MyApp extends StatelessWidget {
       title: "CK TechAssign",
       debugShowCheckedModeBanner: false,
       theme: ThemeData(fontFamily: "Poppins"),
-      home: const HomePage(),
+      home: const LoginPage(),
     );
   }
 }
