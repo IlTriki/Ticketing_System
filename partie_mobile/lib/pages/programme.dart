@@ -1,69 +1,80 @@
 import 'package:flutter/material.dart';
 import 'package:partie_mobile/models/bottomnav_bar.dart';
+import 'package:table_calendar/table_calendar.dart';
+import 'dart:collection';
 
-class ProgrammePage extends StatelessWidget {
+class ProgrammePage extends StatefulWidget {
   const ProgrammePage({Key? key}) : super(key: key);
+
+  @override
+  State<ProgrammePage> createState() => _ProgrammePageState();
+}
+
+class _ProgrammePageState extends State<ProgrammePage> {
+  Map<DateTime, List> _eventsList = {};
+
+  DateTime _focused = DateTime.now();
+  DateTime? _selected;
+
+  int getHashCode(DateTime key) {
+    return key.day * 1000000 + key.month * 10000 + key.year;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _selected = _focused;
+    _eventsList = {
+      DateTime.now().subtract(Duration(days: 2)): ['Test A', 'Test B'],
+      DateTime.now(): ['Test C', 'Test D', 'Test E', 'Test F'],
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
+    final _events = LinkedHashMap<DateTime, List>(
+      equals: isSameDay,
+      hashCode: getHashCode,
+    )..addAll(_eventsList);
+
+    List getEvent(DateTime day) {
+      return _events[day] ?? [];
+    }
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Programme de la semaine'),
-        centerTitle: true,
-      ),
-      body: ListView(
+      body: Column(
         children: [
-          _buildDaySection('Lundi', [
-            '8h00 - 10h00 : Réparation de l\'ordinateur',
-            '10h30 - 12h00 : Installation du logiciel',
-          ]),
-          _buildDaySection('Mardi', [
-            '9h00 - 11h00 : Maintenance du réseau',
-            '14h00 - 16h00 : Configuration du serveur',
-          ]),
-          _buildDaySection('Mercredi', [
-            '10h00 - 12h00 : Dépannage de l\'imprimante',
-            '14h30 - 16h30 : Formation des utilisateurs',
-          ]),
-          _buildDaySection('Jeudi', [
-            '8h30 - 10h30 : Installation du matériel',
-            '11h00 - 13h00 : Réunion avec l\'équipe',
-          ]),
-          _buildDaySection('Vendredi', [
-            '9h30 - 11h30 : Maintenance des équipements',
-            '13h30 - 15h30 : Test de performance',
-          ]),
+          TableCalendar(
+            firstDay: DateTime.utc(2022, 4, 1),
+            lastDay: DateTime.utc(2025, 12, 31),
+            eventLoader: getEvent,
+            calendarFormat: CalendarFormat.week,
+            selectedDayPredicate: (day) {
+              return isSameDay(_selected, day);
+            },
+            onDaySelected: (selected, focused) {
+              if (!isSameDay(_selected, selected)) {
+                setState(() {
+                  _selected = selected;
+                  _focused = focused;
+                });
+              }
+            },
+            focusedDay: _focused,
+          ),
+          ListView(
+            shrinkWrap: true,
+            children: getEvent(_selected!)
+                .map((event) => ListTile(
+                      title: Text(event.toString()),
+                    ))
+                .toList(),
+          )
         ],
       ),
       bottomNavigationBar:
           CustomBottomNavigationBar.buildBottomNavigationBar(1, context),
-    );
-  }
-
-  Widget _buildDaySection(String day, List<String> tasks) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            day,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-        ListView.builder(
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          itemCount: tasks.length,
-          itemBuilder: (context, index) {
-            return ListTile(
-              title: Text(tasks[index]),
-            );
-          },
-        ),
-      ],
     );
   }
 }
