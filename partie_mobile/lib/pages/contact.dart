@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:partie_mobile/models/bottomnav_bar.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ContactPage extends StatelessWidget {
@@ -21,13 +20,11 @@ class ContactPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Contacter le Call Desk'),
-        centerTitle: true,
-      ),
       body: Center(
         child: Column(
           children: [
+            const Text('Contacter le Call Desk'),
+            const SizedBox(height: 20),
             const Text(
               'Vous avez rencontré un problème ?\nContactez le Call Desk',
               style: TextStyle(fontSize: 24),
@@ -81,8 +78,6 @@ class ContactPage extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar:
-          CustomBottomNavigationBar.buildBottomNavigationBar(2, context),
     );
   }
 }

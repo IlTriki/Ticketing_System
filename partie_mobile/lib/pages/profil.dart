@@ -1,20 +1,16 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
 import 'package:flutter/material.dart';
-import 'package:partie_mobile/models/bottomnav_bar.dart';
 
 class ProfilPage extends StatelessWidget {
   const ProfilPage({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Profil'),
-      ),
+    return const Scaffold(
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Text('Profil'),
+            SizedBox(height: 20),
             Icon(
               Icons.person,
               size: 100,
@@ -44,8 +40,6 @@ class ProfilPage extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar:
-          CustomBottomNavigationBar.buildBottomNavigationBar(3, context),
     );
   }
 }

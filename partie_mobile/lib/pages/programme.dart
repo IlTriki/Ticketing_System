@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:partie_mobile/models/bottomnav_bar.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'dart:collection';
 
@@ -73,8 +72,6 @@ class _ProgrammePageState extends State<ProgrammePage> {
           )
         ],
       ),
-      bottomNavigationBar:
-          CustomBottomNavigationBar.buildBottomNavigationBar(1, context),
     );
   }
 }

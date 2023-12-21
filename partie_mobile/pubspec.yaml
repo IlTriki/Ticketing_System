@@ -37,8 +37,10 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter_svg: ^1.1.6
   url_launcher: ^6.2.2
-  syncfusion_flutter_calendar: ^23.2.7
   table_calendar: ^3.0.5
+  http: ^1.1.2
+  intl: ^0.18.1
+  aad_oauth: ^1.0.0
 
 dev_dependencies:
   flutter_test:
