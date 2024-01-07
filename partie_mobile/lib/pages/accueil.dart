@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:partie_mobile/models/programme_model.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class AccueilPage extends StatefulWidget {
   const AccueilPage({Key? key}) : super(key: key);
@@ -14,12 +14,7 @@ class AccueilPage extends StatefulWidget {
 
 class _AccueilPageState extends State<AccueilPage> {
   late double screenWidth;
-  List<ProgrammeModel> programmes = [];
-
-  @override
-  void initState() {
-    super.initState();
-  }
+  List<Map<String, dynamic>> programmes = [];
 
   @override
   void didChangeDependencies() {
@@ -29,23 +24,24 @@ class _AccueilPageState extends State<AccueilPage> {
   }
 
   Future<void> fetchData() async {
-    final response =
-        await http.get(Uri.parse('http://100.74.7.89:3000/tickets'));
+    final response = await http
+        .get(Uri.parse('http://100.74.7.89:3000/tickets-technicien/1'));
 
     if (response.statusCode == 200) {
-      List<dynamic> data = json.decode(response.body);
+      List<Map<String, dynamic>> data =
+          List<Map<String, dynamic>>.from(json.decode(response.body));
+
       setState(() {
-        programmes = data
-            .map((item) => ProgrammeModel(
-                  priorite:
-                      "assets/icons/prioriteVerte.svg", // Replace with your logic for determining priority
-                  horaire: DateFormat('HH:mm')
-                      .format(DateTime.parse(item['DateCreation'])),
-                  nom: item['Probleme'],
-                  lieu:
-                      "Technopole", // Replace with your logic for determining location
-                ))
-            .toList();
+        programmes = data.map((item) {
+          return {
+            'priorite': "assets/icons/priorite${item['Priority']}.svg",
+            'horaire': DateFormat('HH:mm')
+                .format(DateTime.parse(item['DateCreation'])),
+            'nom': item['Probleme'],
+            'adresse': item['Adresse'],
+            'lieu': item['Lieu'],
+          };
+        }).toList();
       });
     }
   }
@@ -103,7 +99,8 @@ class _AccueilPageState extends State<AccueilPage> {
                   ),
                   itemBuilder: (context, index) {
                     return Container(
-                      height: 100,
+                      height:
+                          120, // Adjusted height to accommodate both address and location
                       padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -124,13 +121,13 @@ class _AccueilPageState extends State<AccueilPage> {
                             child: Row(
                               children: [
                                 SvgPicture.asset(
-                                  programmes[index].priorite,
+                                  programmes[index]['priorite'],
                                   width: screenWidth * 0.035,
                                   height: screenWidth * 0.035,
                                 ),
                                 SizedBox(width: screenWidth * 0.01),
                                 Text(
-                                  programmes[index].horaire,
+                                  programmes[index]['horaire'],
                                   style: TextStyle(
                                     fontWeight: FontWeight.w400,
                                     color: const Color(0xFF8F9BB3),
@@ -143,38 +140,48 @@ class _AccueilPageState extends State<AccueilPage> {
                           Positioned(
                             top: 0,
                             right: 0,
-                            child: SvgPicture.asset(
-                              'assets/icons/options.svg',
-                              width: screenWidth * 0.010,
-                              height: screenWidth * 0.010,
+                            child: GestureDetector(
+                              onTap: () {
+                                launchUrlString('https://www.google.com/maps');
+                              },
+                              child: SvgPicture.asset(
+                                'assets/icons/options.svg',
+                                width: screenWidth * 0.010,
+                                height: screenWidth * 0.010,
+                              ),
                             ),
                           ),
                           Positioned(
-                            bottom: 20,
+                            bottom: 10,
                             left: 0,
-                            child: Row(
+                            child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      programmes[index].nom,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w900,
-                                        color: Colors.black,
-                                        fontSize: screenWidth * 0.04,
-                                      ),
-                                    ),
-                                    Text(
-                                      programmes[index].lieu,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w400,
-                                        color: const Color(0xFF8F9BB3),
-                                        fontSize: screenWidth * 0.035,
-                                      ),
-                                    ),
-                                  ],
+                                Text(
+                                  programmes[index]['nom'],
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w900,
+                                    color: Colors.black,
+                                    fontSize: screenWidth * 0.04,
+                                  ),
+                                ),
+                                Text(
+                                  '${programmes[index]['lieu']}',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    color: const Color(0xFF8F9BB3),
+                                    fontSize: screenWidth * 0.035,
+                                  ),
+                                ),
+                                Text(
+                                  programmes[index]['adresse'].length > 30
+                                      ? '${programmes[index]['adresse'].substring(0, 30)}...'
+                                      : programmes[index]['adresse'],
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    color: const Color(0xFF8F9BB3),
+                                    fontSize: screenWidth * 0.035,
+                                  ),
                                 ),
                               ],
                             ),
@@ -182,10 +189,15 @@ class _AccueilPageState extends State<AccueilPage> {
                           Positioned(
                             bottom: 0,
                             right: 0,
-                            child: SvgPicture.asset(
-                              'assets/icons/boutonGo.svg',
-                              width: screenWidth * 0.10,
-                              height: screenWidth * 0.10,
+                            child: GestureDetector(
+                              onTap: () {
+                                launchUrlString('https://www.google.com/maps');
+                              },
+                              child: SvgPicture.asset(
+                                'assets/icons/boutonGo.svg',
+                                width: screenWidth * 0.10,
+                                height: screenWidth * 0.10,
+                              ),
                             ),
                           ),
                         ],

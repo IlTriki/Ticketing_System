@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:partie_mobile/models/credential_checkers.dart';
 import 'package:partie_mobile/models/navigator_function.dart';
 import 'package:partie_mobile/models/text_field.dart';
 import 'package:partie_mobile/pages/forgot_password.dart';
@@ -100,7 +101,23 @@ class _LoginPageState extends State<LoginPage> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    navigateToPage(context, const HomePage());
+                    if (emailTextController.text.isEmpty ||
+                        passwordTextController.text.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Veuillez remplir tous les champs'),
+                        ),
+                      );
+                    } else if (!checkCredentials(emailTextController.text,
+                        passwordTextController.text)) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Email ou mot de passe incorrect'),
+                        ),
+                      );
+                    } else {
+                      navigateToPage(context, const HomePage());
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0XFF003869),
