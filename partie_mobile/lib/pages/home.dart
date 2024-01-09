@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:partie_mobile/pages/accueil.dart';
-import 'package:partie_mobile/pages/connexion.dart';
 import 'package:partie_mobile/pages/contact.dart';
 import 'package:partie_mobile/pages/profil.dart';
 import 'package:partie_mobile/pages/programme.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       title: 'BottomNavigationBar Example',
       home: HomePage(),
     );
@@ -30,10 +31,10 @@ class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
 
   final List<Widget> _pages = [
-    AccueilPage(),
-    ProgrammePage(),
-    ContactPage(),
-    ProfilPage(),
+    const AccueilPage(),
+    const ProgrammePage(),
+    const ContactPage(),
+    const ProfilPage(),
   ];
 
   @override
@@ -56,7 +57,8 @@ class CustomBottomNavigationBar extends StatefulWidget {
   final int currentIndex;
   final Function(int) onTap;
 
-  CustomBottomNavigationBar({required this.currentIndex, required this.onTap});
+  CustomBottomNavigationBar(
+      {super.key, required this.currentIndex, required this.onTap});
 
   @override
   _CustomBottomNavigationBarState createState() =>

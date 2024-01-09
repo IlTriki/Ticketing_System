@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:partie_mobile/pages/connexion.dart';
-import 'package:partie_mobile/pages/home.dart';
 
 void main() {
   runApp(const MyApp());

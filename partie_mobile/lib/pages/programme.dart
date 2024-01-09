@@ -25,20 +25,20 @@ class _ProgrammePageState extends State<ProgrammePage> {
 
     _selected = _focused;
     _eventsList = {
-      DateTime.now().subtract(Duration(days: 2)): ['Test A', 'Test B'],
+      DateTime.now().subtract(const Duration(days: 2)): ['Test A', 'Test B'],
       DateTime.now(): ['Test C', 'Test D', 'Test E', 'Test F'],
     };
   }
 
   @override
   Widget build(BuildContext context) {
-    final _events = LinkedHashMap<DateTime, List>(
+    final events = LinkedHashMap<DateTime, List>(
       equals: isSameDay,
       hashCode: getHashCode,
     )..addAll(_eventsList);
 
     List getEvent(DateTime day) {
-      return _events[day] ?? [];
+      return events[day] ?? [];
     }
 
     return Scaffold(
