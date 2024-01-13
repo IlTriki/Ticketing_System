@@ -1,0 +1,9 @@
+<div class="client-container">
+    
+    <div class="contenu" [ngClass]="{'menuOpen': menu.menuOpen}">
+        <app-ticket-system *ngIf="selectedMenu === 'tickets'"></app-ticket-system>
+        <app-messagerie *ngIf="selectedMenu === 'messagerie'"></app-messagerie>
+        <app-equipements *ngIf="selectedMenu === 'equipements'"></app-equipements>
+    </div>
+    <app-menu #menu (menuSelected)="selectedMenu = $event"></app-menu>
+</div>

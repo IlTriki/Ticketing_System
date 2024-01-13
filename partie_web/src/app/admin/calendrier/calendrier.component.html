@@ -1,0 +1,19 @@
+<h1>Calendrier</h1>
+<mwl-calendar-month-view
+  [viewDate]="viewDate"
+  [events]="events">
+  <ng-template #cellTemplate let-day="day">
+    <div
+      cdkDropList
+      (cdkDropListDropped)="drop($event)"
+      (cdkDropListEntered)="dragMoved(day)">
+      {{ day.date | date:'dd' }}
+    </div>
+  </ng-template>
+</mwl-calendar-month-view>
+<h2>Tickets sans rendez-vous</h2>
+<ul cdkDropList (cdkDropListDropped)="drop($event)">
+    <li *ngFor="let nordv of nordvs" cdkDrag>
+        {{ nordv.Id }} - {{ nordv.DateCreation | date:'shortDate' }} - {{ nordv.Probleme}}
+    </li>
+</ul>

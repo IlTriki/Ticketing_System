@@ -1,0 +1,34 @@
+<div class="button-group">
+    <button [ngClass]="{'active': selectedTab === 'all'}"
+        (click)="selectedTab = 'all'" class="btn"
+        style="display: flex; align-items: center;">
+        <img class="icon" src="assets/images/sms.svg"
+            alt="Iconsax/Linear/setting" />Tous</button>
+    <button [ngClass]="{'active': selectedTab === 'open'}"
+        (click)="selectedTab = 'open'" class="btn"
+        style="display: flex; align-items: center;">
+        <img class="icon" src="assets/images/sms-notification.svg"
+            alt="Iconsax/Linear/setting" />Ouverts</button>
+    <button [ngClass]="{'active': selectedTab === 'doing'}"
+        (click)="selectedTab = 'doing'" class="btn"
+        style="display: flex; align-items: center;">
+        <img class="icon" src="assets/images/sms-tracking.svg"
+            alt="Iconsax/Linear/setting" />En Cours</button>
+    <button [ngClass]="{'active': selectedTab === 'closed'}"
+        (click)="selectedTab = 'closed'" class="btn"
+        style="display: flex; align-items: center;">
+        <img class="icon" src="assets/images/sms-star.svg"
+            alt="Iconsax/Linear/setting" /> Terminé</button>
+</div>
+<ul>
+    <li *ngFor="let ticket of filteredTickets">
+        <a [routerLink]="['../admin/conversation', ticket.Id]">
+            <div class="ticket-details">
+                <p>Numéro de ticket: {{ticket.Id}}</p>
+                <p>Problème: {{ticket.Probleme}}</p>
+                <p>EtatTicket: {{ticket.EtatTicket}}</p>
+                <p>Date: {{ticket.DateCreation | date:'short'}}</p>
+            </div>
+        </a>
+    </li>
+</ul>

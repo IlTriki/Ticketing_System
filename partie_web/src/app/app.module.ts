@@ -1,31 +1,115 @@
+import { BrowserModule, provideClientHydration} from '@angular/platform-browser';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
-import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
-import { ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+
+
+import { MatButtonModule } from '@angular/material/button';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatListModule } from '@angular/material/list';
+import { MatMenuModule } from '@angular/material/menu';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { LoginComponent } from './login/login.component';
-import { HttpClientModule } from '@angular/common/http';
-import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { IPublicClientApplication, PublicClientApplication, InteractionType, BrowserCacheLocation, LogLevel } from '@azure/msal-browser';
+import { MsalGuard, MsalInterceptor, MsalBroadcastService, MsalInterceptorConfiguration, MsalModule, MsalService, MSAL_GUARD_CONFIG, MSAL_INSTANCE, MSAL_INTERCEPTOR_CONFIG, MsalGuardConfiguration, MsalRedirectComponent } from '@azure/msal-angular';
+import { environment } from 'src/environments/environments';
+import { FailedLoginComponent } from './failed-login/failed-login.component';
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { ConversationComponent as ConversationComponentClient} from './client/conversation/conversation.component';
+import { ConversationComponent as ConversationComponentAdmin} from './admin/conversation/conversation.component';
+
+export function loggerCallback(logLevel: LogLevel, message: string) {
+  console.log(message);
+}
+
+export function MSALInstanceFactory(): IPublicClientApplication {
+  return new PublicClientApplication({
+    auth: {
+      clientId: environment.msalConfig.auth.clientId,
+      authority: environment.msalConfig.auth.authority,
+      redirectUri: '/',
+      postLogoutRedirectUri: '/'
+    },
+    cache: {
+      cacheLocation: BrowserCacheLocation.LocalStorage
+    },
+    system: {
+      allowNativeBroker: false, // Disables WAM Broker
+      loggerOptions: {
+        loggerCallback,
+        logLevel: LogLevel.Info,
+        piiLoggingEnabled: false
+      }
+    }
+  });
+}
+
+export function MSALInterceptorConfigFactory(): MsalInterceptorConfiguration {
+  const protectedResourceMap = new Map<string, Array<string>>();
+  protectedResourceMap.set(environment.apiConfig.uri, environment.apiConfig.scopes);
+
+  return {
+    interactionType: InteractionType.Redirect,
+    protectedResourceMap
+  };
+}
+
+export function MSALGuardConfigFactory(): MsalGuardConfiguration {
+  return { 
+    interactionType: InteractionType.Redirect,
+    authRequest: {
+      scopes: [...environment.apiConfig.scopes]
+    },
+    loginFailedRoute: '/login-failed'
+  };
+}
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent,
-    ForgotPasswordComponent,
+    FailedLoginComponent,
+    ConversationComponentClient,
+    ConversationComponentAdmin
   ],
   imports: [
     BrowserModule,
+    NoopAnimationsModule, // Animations cause delay which interfere with E2E tests
     AppRoutingModule,
+    MatButtonModule,
+    MatToolbarModule,
+    MatListModule,
+    MatMenuModule,
     HttpClientModule,
-    ReactiveFormsModule,
-    CommonModule,
-    FormsModule ,
+    MsalModule,
+    FormsModule,
+    CommonModule
   ],
   providers: [
-    provideClientHydration()
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: MsalInterceptor,
+      multi: true
+    },
+    {
+      provide: MSAL_INSTANCE,
+      useFactory: MSALInstanceFactory
+    },
+    {
+      provide: MSAL_GUARD_CONFIG,
+      useFactory: MSALGuardConfigFactory
+    },
+    {
+      provide: MSAL_INTERCEPTOR_CONFIG,
+      useFactory: MSALInterceptorConfigFactory
+    },
+    provideClientHydration(),
+    MsalService,
+    MsalGuard,
+    MsalBroadcastService
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent, MsalRedirectComponent]
 })
 export class AppModule { }

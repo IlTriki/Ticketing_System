@@ -1,0 +1,32 @@
+.toolbar-spacer {
+    flex: 1 1 auto;
+}
+
+.mat-toolbar {
+    height: 20%;
+}
+
+.mat-toolbar.mat-primary {
+    background: #003869;
+}
+
+a.title {
+    color: white;
+    text-decoration: none;
+}
+
+.mat-color {
+    background-color: lightblue;
+    margin: 1vh;
+}
+
+.mat-color:hover {
+    background-color: lightcyan;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}

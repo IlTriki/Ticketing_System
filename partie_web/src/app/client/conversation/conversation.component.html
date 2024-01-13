@@ -1,0 +1,10 @@
+<h1>Conversation pour le ticket {{ticketId}}</h1>
+
+<div *ngFor="let message of messages">
+    <p><strong>{{message.sender}}:</strong> {{message.text}}</p>
+</div>
+
+<form (ngSubmit)="sendMessage()">
+    <input type="text" [(ngModel)]="newMessage" name="newMessage">
+    <button type="submit">Envoyer</button>
+</form>

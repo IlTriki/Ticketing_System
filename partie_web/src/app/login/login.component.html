@@ -1,8 +1,0 @@
-<div id="container" [formGroup]="form">
-    <h1>Page de connexion</h1>
-    <input type="text" formControlName="username" placeholder="Nom d'utilisateur"/>
-    <input type="password" formControlName="password" placeholder="Mot de passe"/>
-    
-    <button id="login" (click)="login()" [disabled]="!form.valid">Login</button>
-    <button id="forgotPassword" type="button" (click)="forgotPassword()">Mot de passe oublié</button>
-</div>

@@ -1,5 +1,9 @@
-<app-menu></app-menu>
-
-<h1>Page d'accueil de l'admin</h1>
-
-<app-ticket-system></app-ticket-system>
+<div class="admin-container">
+    
+    <div class="contenu" [ngClass]="{'menuOpen': menu.menuOpen}">
+        <app-ticket-system *ngIf="selectedMenu === 'tickets'"></app-ticket-system>
+        <app-messagerie *ngIf="selectedMenu === 'messagerie'"></app-messagerie>
+        <app-calendrier *ngIf="selectedMenu === 'calendrier'"></app-calendrier>
+    </div>
+    <app-menu #menu (menuSelected)="selectedMenu = $event"></app-menu>
+</div>

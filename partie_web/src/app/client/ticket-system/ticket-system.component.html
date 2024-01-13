@@ -1,0 +1,99 @@
+<div class="search-and-dropdown">
+    <div class="search-bar">
+        <input [(ngModel)]="searchTerm" placeholder="Rechercher un ticket..." />
+    </div>
+
+    <div class="dropdown-and-add-ticket">
+        <div class="dropdown">
+            <button class="dropdown-button">Etat
+                &#x25BC;</button>
+            <div class="dropdown-content">
+                <label *ngFor="let status of statuses">
+                    <input type="checkbox" [value]="status.value"
+                        [(ngModel)]="status.selected">
+                    <span>{{status.label}}</span>
+
+                </label>
+            </div>
+        </div>
+
+        <div class="dropdown">
+            <button class="dropdown-button">Priorité
+                &#x25BC;</button>
+            <div class="dropdown-content">
+                <label *ngFor="let prio of priorities">
+                    <input type="checkbox" [value]="prio.value"
+                        [(ngModel)]="prio.selected">
+                    <i class="fa fa-exclamation-triangle danger-logo"
+                        [ngClass]="{
+                        'priority-low': prio.label === 'Vert',
+                        'priority-medium': prio.label === 'Orange',
+                        'priority-high': prio.label === 'Rouge'
+                    }"></i>
+
+                    <span>{{ " " +prio.label}}</span>
+                </label>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="button-group">
+    <button [ngClass]="{'active': selectedTab === 'all'}"
+        (click)="selectedTab = 'all'" class="btn"
+        style="display: flex; align-items: center;">
+        <img class="icon" src="assets/images/sms.svg"
+            alt="Iconsax/Linear/setting" />Tous</button>
+    <button [ngClass]="{'active': selectedTab === 'open'}"
+        (click)="selectedTab = 'open'" class="btn"
+        style="display: flex; align-items: center;">
+        <img class="icon" src="assets/images/sms-notification.svg"
+            alt="Iconsax/Linear/setting" />Ouverts</button>
+    <button [ngClass]="{'active': selectedTab === 'doing'}"
+        (click)="selectedTab = 'doing'" class="btn"
+        style="display: flex; align-items: center;">
+        <img class="icon" src="assets/images/sms-tracking.svg"
+            alt="Iconsax/Linear/setting" />En Cours</button>
+    <button [ngClass]="{'active': selectedTab === 'closed'}"
+        (click)="selectedTab = 'closed'" class="btn"
+        style="display: flex; align-items: center;">
+        <img class="icon" src="assets/images/sms-star.svg"
+            alt="Iconsax/Linear/setting" /> Terminé</button>
+</div>
+
+
+<article class="ticket" *ngFor="let ticket of filteredTickets">
+    <header class="ticket-header">
+        <div class="ticket-info-container">
+            <div class="ticket-id-container">
+                <div class="etat-indicator" [ngClass]="{
+                    'etat-bleu': ticket.EtatTicket === 'Ouverts',
+                    'etat-jaune': ticket.EtatTicket === 'En cours',
+                    'etat-vert': ticket.EtatTicket === 'Terminés'
+                }"></div>
+                <h2 class="ticket-number">{{"Ticket #" + ticket.Id}}</h2>
+                <i class="fa fa-exclamation-triangle danger-logo" [ngClass]="{
+                    'priority-low': ticket.Priority === 'Vert',
+                    'priority-medium': ticket.Priority === 'Orange',
+                    'priority-high': ticket.Priority === 'Rouge'
+                }"></i>
+            </div>
+            <h3 class="ticket-title">{{ticket.Probleme}}</h3>
+        </div>
+        <time class="ticket-date">{{ticket.DateCreation | date:'dd/MM/yyyy'}}</time>
+    </header>
+    <section class="ticket-content">
+        <div class="ticket-description">
+            <p>{{ticket.description}}</p>
+        </div>
+        <footer class="ticket-footer">
+            <button class="edit-button" style="display: flex; align-items: center;">
+                <img class="icon" src="assets/images/message-edit.svg"
+                alt="Iconsax/Linear/setting" />Éditer</button>
+            </footer>
+    </section>
+    <hr class="separator"> <!-- Ligne de séparation -->
+    <section class="ticket-details-link">
+        <a href="/ticket-details/{{ticket.Id}}">Voir les détails du ticket</a>
+    </section>
+</article>

@@ -1,0 +1,63 @@
+.button-group {
+    display: flex;
+    margin-bottom: 10px;
+  }
+  
+  .btn {
+    padding: 10px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    margin-right: 50px;
+  }
+  
+  .btn.active {
+     border-bottom: solid blue; 
+  }
+
+  .btn:last-child {
+    margin-right: 0; /* Supprimez l'espace à droite du dernier bouton */
+    }
+  
+  i {
+    margin-right: 5px;
+    color: darkblue;
+  }
+  
+
+  ul {
+    list-style-type: none; /* Supprime les puces de la liste */
+    padding: 0; /* Supprime le padding par défaut de la liste */
+}
+
+li {
+    border: 1px solid #ccc; /* Ajoute une bordure autour de chaque élément de la liste */
+    margin-bottom: 10px; /* Ajoute un espace entre les éléments de la liste */
+    padding: 10px; /* Ajoute un espace à l'intérieur de chaque élément de la liste */
+}
+
+a {
+    text-decoration: none; /* Supprime le soulignement des liens */
+    color: black; /* Change la couleur du texte des liens */
+}
+
+a:hover {
+    color: blue; /* Change la couleur du texte des liens lorsqu'ils sont survolés */
+}
+
+p {
+    margin: 0 0 10px 0; /* Ajoute un espace sous chaque paragraphe */
+}
+
+p:last-child {
+    margin-bottom: 0; /* Supprime l'espace sous le dernier paragraphe */
+}
+
+.ticket-details {
+    display: flex;
+    justify-content: space-between;
+}
+
+.ticket-details p {
+    margin: 0;
+}
