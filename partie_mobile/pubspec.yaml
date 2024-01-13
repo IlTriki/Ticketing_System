@@ -41,6 +41,8 @@ dependencies:
   http: ^1.1.2
   intl: ^0.18.1
   aad_oauth: ^1.0.0
+  qr_flutter: ^4.1.0
+  smooth_page_indicator: ^1.1.0
 
 dev_dependencies:
   flutter_test:

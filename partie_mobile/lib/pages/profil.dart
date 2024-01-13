@@ -32,7 +32,7 @@ class _ProfilPageState extends State<ProfilPage> {
         setState(() {
           profilData = data.map((item) {
             return {
-              'photo': "http://100.74.7.89/images/pp/${item['Photo']}.jpg",
+              'photo': 'http://100.74.7.89:3000/images/${item['Photo']}.jpg',
               'nom': item['nom'],
               'prenom': item['prenom'],
               'numero': item['numero'],
@@ -51,43 +51,65 @@ class _ProfilPageState extends State<ProfilPage> {
     return Scaffold(
       backgroundColor: const Color(0xFFFFFFFF),
       body: Container(
-        margin: const EdgeInsets.all(20),
-        child: Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const SizedBox(height: 20),
-              const Text('Profil'),
-              const SizedBox(height: 20),
-              if (profilData.isNotEmpty)
-                CircleAvatar(
-                  radius: 50,
-                  backgroundImage: NetworkImage(profilData[0]['photo']),
-                )
-              else
-                const Icon(
-                  Icons.person,
-                  size: 100,
-                ),
-              const SizedBox(height: 20),
-              if (profilData.isNotEmpty)
-                Text(
-                  '${profilData[0]['nom']} ${profilData[0]['prenom']}',
-                  style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
+        padding: const EdgeInsets.only(top: 20),
+        child: Scaffold(
+          backgroundColor: const Color(0xFFFFFFFF),
+          body: Center(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                _title(),
+                const SizedBox(height: 20),
+                if (profilData.isNotEmpty)
+                  CircleAvatar(
+                    radius: 50,
+                    backgroundImage: NetworkImage(profilData[0]['photo']),
+                  )
+                else
+                  const Icon(
+                    Icons.person,
+                    size: 100,
                   ),
-                ),
-              const SizedBox(height: 10),
-              if (profilData.isNotEmpty)
-                Text(
-                  '${profilData[0]['numero']}\n${profilData[0]['adresse']}',
-                  style: const TextStyle(
-                    fontSize: 16,
+                const SizedBox(height: 20),
+                if (profilData.isNotEmpty)
+                  Text(
+                    '${profilData[0]['nom']} ${profilData[0]['prenom']}',
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-            ],
+                const SizedBox(height: 10),
+                if (profilData.isNotEmpty)
+                  Text(
+                    '${profilData[0]['numero']}\n${profilData[0]['adresse']}',
+                    style: const TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+              ],
+            ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Container _title() {
+    return Container(
+      color: Colors.white,
+      alignment: Alignment.center,
+      margin: const EdgeInsets.only(top: 20),
+      padding: const EdgeInsets.only(
+        top: 20,
+        bottom: 20,
+      ),
+      child: Text(
+        'Profile',
+        style: TextStyle(
+          color: Colors.black,
+          fontSize: screenWidth * 0.04,
+          fontWeight: FontWeight.w600,
         ),
       ),
     );
