@@ -25,7 +25,7 @@ class _AccueilPageState extends State<AccueilPage> {
 
   Future<void> fetchData() async {
     final response = await http
-        .get(Uri.parse('http://100.74.7.89:3000/tickets-technicien/1'));
+        .get(Uri.parse('https://100.74.7.89:3000/tickets-technicien/1'));
 
     if (response.statusCode == 200) {
       List<Map<String, dynamic>> data =
@@ -85,7 +85,7 @@ class _AccueilPageState extends State<AccueilPage> {
         SizedBox(
           height: MediaQuery.of(context).size.height * 0.792,
           child: programmes.isEmpty
-              ? Center(child: CircularProgressIndicator())
+              ? const Center(child: CircularProgressIndicator())
               : ListView.separated(
                   itemCount: programmes.length,
                   padding: const EdgeInsets.only(

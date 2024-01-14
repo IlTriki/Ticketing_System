@@ -23,7 +23,7 @@ class _ProfilPageState extends State<ProfilPage> {
   Future<void> fetchData() async {
     try {
       final response = await http
-          .get(Uri.parse('http://100.74.7.89:3000/info-technicien/1'));
+          .get(Uri.parse('https://100.74.7.89:3000/info-technicien/1'));
 
       if (response.statusCode == 200) {
         List<Map<String, dynamic>> data =
@@ -32,7 +32,7 @@ class _ProfilPageState extends State<ProfilPage> {
         setState(() {
           profilData = data.map((item) {
             return {
-              'photo': 'http://100.74.7.89:3000/images/${item['Photo']}.jpg',
+              'photo': 'https://100.74.7.89:3000/images/${item['Photo']}.jpg',
               'nom': item['nom'],
               'prenom': item['prenom'],
               'numero': item['numero'],
