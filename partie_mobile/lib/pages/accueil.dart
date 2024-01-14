@@ -208,7 +208,7 @@ class _AccueilPageState extends State<AccueilPage> {
                                 launchUrlString('https://www.google.com/maps');
                               },
                               child: SvgPicture.asset(
-                                'assets/icons/boutonGo.svg',
+                                'assets/icons/boutonStart.svg',
                                 width: screenWidth * 0.10,
                                 height: screenWidth * 0.10,
                               ),
