@@ -25,7 +25,7 @@ class _AccueilPageState extends State<AccueilPage> {
 
   Future<void> fetchData() async {
     final response = await http
-        .get(Uri.parse('http://100.74.7.89:3000/tickets-technicien/1'));
+        .get(Uri.parse('https://100.74.7.89:3000/tickets-technicien/1'));
 
     if (response.statusCode == 200) {
       List<Map<String, dynamic>> data =
@@ -142,7 +142,7 @@ class _AccueilPageState extends State<AccueilPage> {
                             right: 0,
                             child: GestureDetector(
                               onTap: () {
-                                launchUrlString('https://www.google.com/maps');
+                                launchUrlString('http://support.ricoh.com/bb_v1oi/pub_e/oi/0001031/0001031308/VB23578xx_01/B2357832.pdf');
                               },
                               child: SvgPicture.asset(
                                 'assets/icons/options.svg',
@@ -189,6 +189,20 @@ class _AccueilPageState extends State<AccueilPage> {
                           Positioned(
                             bottom: 0,
                             right: 0,
+                            child: GestureDetector(
+                              onTap: () {
+                                launchUrlString('https://www.google.com/maps');
+                              },
+                              child: SvgPicture.asset(
+                                'assets/icons/boutonGo.svg',
+                                width: screenWidth * 0.10,
+                                height: screenWidth * 0.10,
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 0,
+                            right: 1.67*25,
                             child: GestureDetector(
                               onTap: () {
                                 launchUrlString('https://www.google.com/maps');

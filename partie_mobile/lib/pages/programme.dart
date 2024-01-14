@@ -9,11 +9,16 @@ class ProgrammePage extends StatefulWidget {
   State<ProgrammePage> createState() => _ProgrammePageState();
 }
 
+
+
 class _ProgrammePageState extends State<ProgrammePage> {
   Map<DateTime, List> _eventsList = {};
 
   DateTime _focused = DateTime.now();
   DateTime? _selected;
+  late CalendarFormat _calendarFormat;
+    
+  
 
   int getHashCode(DateTime key) {
     return key.day * 1000000 + key.month * 10000 + key.year;
@@ -22,7 +27,7 @@ class _ProgrammePageState extends State<ProgrammePage> {
   @override
   void initState() {
     super.initState();
-
+    _calendarFormat = CalendarFormat.month;
     _selected = _focused;
     _eventsList = {
       DateTime.now().subtract(const Duration(days: 2)): ['Test A', 'Test B'],
@@ -48,7 +53,12 @@ class _ProgrammePageState extends State<ProgrammePage> {
             firstDay: DateTime.utc(2022, 4, 1),
             lastDay: DateTime.utc(2025, 12, 31),
             eventLoader: getEvent,
-            calendarFormat: CalendarFormat.week,
+            calendarFormat: _calendarFormat,
+            onFormatChanged: (format) {
+                setState(() {
+                _calendarFormat = format;
+                });
+            },
             selectedDayPredicate: (day) {
               return isSameDay(_selected, day);
             },
