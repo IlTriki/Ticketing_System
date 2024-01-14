@@ -85,7 +85,7 @@ class _AccueilPageState extends State<AccueilPage> {
         SizedBox(
           height: MediaQuery.of(context).size.height * 0.792,
           child: programmes.isEmpty
-              ? Center(child: CircularProgressIndicator())
+              ? const Center(child: CircularProgressIndicator())
               : ListView.separated(
                   itemCount: programmes.length,
                   padding: const EdgeInsets.only(
