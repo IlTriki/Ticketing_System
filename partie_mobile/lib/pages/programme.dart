@@ -13,7 +13,7 @@ class ProgrammePage extends StatefulWidget {
 
 class _ProgrammePageState extends State<ProgrammePage> {
   Map<DateTime, List> _eventsList = {};
-
+  Map<DateTime, List> _eventsDescrip = {};
   DateTime _focused = DateTime.now();
   DateTime? _selected;
   late CalendarFormat _calendarFormat;
@@ -30,8 +30,28 @@ class _ProgrammePageState extends State<ProgrammePage> {
     _calendarFormat = CalendarFormat.month;
     _selected = _focused;
     _eventsList = {
-      DateTime.now().subtract(const Duration(days: 2)): ['Test A', 'Test B'],
-      DateTime.now(): ['Test C', 'Test D', 'Test E', 'Test F'],
+      DateTime.now().subtract(const Duration(days: 5)): ['Changement pièce imprimante', 'Maintenance Ecran Open Space'],
+      DateTime.now().subtract(const Duration(days: 4)): ['Installation imprimante'],
+      DateTime.now().subtract(const Duration(days: 3)): ['Installation imprimante scanner Recoh'],
+      DateTime.now().subtract(const Duration(days: 2)): ['Installation écran connecté'],
+      DateTime.now().subtract(const Duration(days: 1)): ['Maintenance scanner'],
+      DateTime.now(): ['Réparation imprimante'],
+      DateTime.now().add(const Duration(days: 1)): ['Maintenance écran intéractif', 'Installation imprimante scanner Recoh'],
+      DateTime.now().add(const Duration(days: 2)): ['Maintenance écran intéractif'],
+      DateTime.now().add(const Duration(days: 3)): ['Maintenance écran intéractif', 'Installation imprimante scanner Recoh'],
+      DateTime.now().add(const Duration(days: 4)): ['Maintenance écran intéractif'],
+    };
+    _eventsDescrip = {
+      DateTime.now().subtract(const Duration(days: 5)): ['Fnac Saint Jacques','12:00 - 16:00', DateTime.now().subtract(const Duration(days: 5)),'Fnac Saint Jacques','12:00 - 16:00', DateTime.now().subtract(const Duration(days: 5))],
+      DateTime.now().subtract(const Duration(days: 4)): ['Fnac Saint Jacques','12:00 - 16:00', DateTime.now().subtract(const Duration(days: 4))],
+      DateTime.now().subtract(const Duration(days: 3)): ['Fnac Saint Jacques','12:00 - 16:00', DateTime.now().subtract(const Duration(days: 3))],
+      DateTime.now().subtract(const Duration(days: 2)): ['Préfecture de Police','12:00 - 16:00', DateTime.now().subtract(const Duration(days: 2))],
+      DateTime.now().subtract(const Duration(days: 1)): ['Siège de Google','12:00 - 16:00', DateTime.now().subtract(const Duration(days: 1))],
+      DateTime.now(): ['IUT de Metz','15:30 - 16:30', DateTime.now()],
+      DateTime.now().add(const Duration(days: 1)): ['Siège de Google','12:00 - 16:00', DateTime.now().add(const Duration(days: 1)), 'Siège de Google','12:00 - 16:00', DateTime.now().add(const Duration(days: 3))],
+      DateTime.now().add(const Duration(days: 2)): ['Siège de Google','12:00 - 16:00', DateTime.now().add(const Duration(days: 2))],
+      DateTime.now().add(const Duration(days: 3)): ['Siège de Google','12:00 - 16:00', DateTime.now().add(const Duration(days: 3)), 'Siège de Google','12:00 - 16:00', DateTime.now().add(const Duration(days: 3))],
+      DateTime.now().add(const Duration(days: 4)): ['Siège de Google','12:00 - 16:00', DateTime.now().add(const Duration(days: 4))],
     };
   }
 
@@ -41,6 +61,15 @@ class _ProgrammePageState extends State<ProgrammePage> {
       equals: isSameDay,
       hashCode: getHashCode,
     )..addAll(_eventsList);
+
+    final eventsDesc = LinkedHashMap<DateTime, List>(
+      equals: isSameDay,
+      hashCode: getHashCode,
+    )..addAll(_eventsDescrip);
+
+    List getEventDesc(DateTime day) {
+      return eventsDesc[day] ?? [];
+    }
 
     List getEvent(DateTime day) {
       return events[day] ?? [];
@@ -76,6 +105,21 @@ class _ProgrammePageState extends State<ProgrammePage> {
             shrinkWrap: true,
             children: getEvent(_selected!)
                 .map((event) => ListTile(
+                      title: Text(event.toString()),
+                    ))
+                .toList(),
+          ),
+          ListView(
+            shrinkWrap: true,
+            padding: const EdgeInsets.only(
+                    bottom: 30,
+                    right: 30,
+                    left: 30,
+                    top: 20,
+            ),
+            children: getEventDesc(_selected!)
+                .map((event) => ListTile(
+                      tileColor: Color.fromARGB(169, 154, 84, 201),
                       title: Text(event.toString()),
                     ))
                 .toList(),
