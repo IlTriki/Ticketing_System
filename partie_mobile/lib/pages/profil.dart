@@ -59,33 +59,37 @@ class _ProfilPageState extends State<ProfilPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 _title(),
-                const SizedBox(height: 20),
                 if (profilData.isNotEmpty)
-                  CircleAvatar(
-                    radius: 50,
-                    backgroundImage: NetworkImage(profilData[0]['photo']),
-                  )
-                else
-                  const Icon(
-                    Icons.person,
-                    size: 100,
-                  ),
-                const SizedBox(height: 20),
-                if (profilData.isNotEmpty)
-                  Text(
-                    '${profilData[0]['nom']} ${profilData[0]['prenom']}',
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                const SizedBox(height: 10),
-                if (profilData.isNotEmpty)
-                  Text(
-                    '${profilData[0]['numero']}\n${profilData[0]['adresse']}',
-                    style: const TextStyle(
-                      fontSize: 16,
-                    ),
+                  Column(
+                    children: [
+                      const SizedBox(height: 20),
+                      CircleAvatar(
+                        radius: 150,
+                        backgroundImage: NetworkImage(profilData[0]['photo']),
+                      ),
+                      Text(
+                        'Bienvenue ${profilData[0]['prenom']} ${profilData[0]['nom'].toUpperCase()}',
+                        style: const TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 40),
+                      Text(
+                        'Numéro : ${profilData[0]['numero']}',
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ),
+                      const SizedBox(height: 40),
+                      Text(
+                        'Domicile : ${profilData[0]['adresse']}',
+                        style: const TextStyle(
+                          fontSize: 20,
+                        ),
+                      ),
+                    ],
                   ),
               ],
             ),

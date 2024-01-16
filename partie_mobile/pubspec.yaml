@@ -43,6 +43,7 @@ dependencies:
   aad_oauth: ^1.0.0
   qr_flutter: ^4.1.0
   smooth_page_indicator: ^1.1.0
+  stop_watch_timer: ^3.0.2
 
 dev_dependencies:
   flutter_test:

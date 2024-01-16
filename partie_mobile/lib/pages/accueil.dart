@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+import 'package:partie_mobile/models/chrono_programme.dart';
 
 class AccueilPage extends StatefulWidget {
   const AccueilPage({Key? key}) : super(key: key);
@@ -142,7 +143,8 @@ class _AccueilPageState extends State<AccueilPage> {
                             right: 0,
                             child: GestureDetector(
                               onTap: () {
-                                launchUrlString('http://support.ricoh.com/bb_v1oi/pub_e/oi/0001031/0001031308/VB23578xx_01/B2357832.pdf');
+                                launchUrlString(
+                                    'http://support.ricoh.com/bb_v1oi/pub_e/oi/0001031/0001031308/VB23578xx_01/B2357832.pdf');
                               },
                               child: SvgPicture.asset(
                                 'assets/icons/options.svg',
@@ -202,10 +204,15 @@ class _AccueilPageState extends State<AccueilPage> {
                           ),
                           Positioned(
                             bottom: 0,
-                            right: 1.67*25,
+                            right: 1.67 * 25,
                             child: GestureDetector(
                               onTap: () {
-                                launchUrlString('https://www.google.com/maps');
+                                showModalBottomSheet(
+                                  context: context,
+                                  builder: (context) => TicketDetailsPage(
+                                    ticketDetails: programmes[index],
+                                  ),
+                                );
                               },
                               child: SvgPicture.asset(
                                 'assets/icons/boutonStart.svg',

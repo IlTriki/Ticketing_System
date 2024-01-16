@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:partie_mobile/models/credential_checkers.dart';
 import 'package:partie_mobile/models/navigator_function.dart';
 import 'package:partie_mobile/models/text_field.dart';
-import 'package:partie_mobile/pages/forgot_password.dart';
+import 'package:partie_mobile/pages/contact.dart';
 import 'package:partie_mobile/pages/home.dart';
 
 class LoginPage extends StatefulWidget {
@@ -16,6 +16,7 @@ class _LoginPageState extends State<LoginPage> {
   // textfield controllers
   final emailTextController = TextEditingController();
   final passwordTextController = TextEditingController();
+  var errorMessage = '';
 
   @override
   Widget build(BuildContext context) {
@@ -93,7 +94,14 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
 
-              const SizedBox(height: 10),
+              Text(
+                errorMessage,
+                style: const TextStyle(
+                  color: Colors.red,
+                ),
+              ),
+
+              const SizedBox(height: 5),
 
               // connexion button
               Container(
@@ -101,23 +109,17 @@ class _LoginPageState extends State<LoginPage> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    if (emailTextController.text.isEmpty ||
-                        passwordTextController.text.isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Veuillez remplir tous les champs'),
-                        ),
-                      );
-                    } else if (!checkCredentials(emailTextController.text,
-                        passwordTextController.text)) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Email ou mot de passe incorrect'),
-                        ),
-                      );
-                    } else {
-                      navigateToPage(context, const HomePage());
-                    }
+                    setState(() {
+                      if (emailTextController.text.isEmpty ||
+                          passwordTextController.text.isEmpty) {
+                        errorMessage = 'Veuillez remplir tous les champs';
+                      } else if (!checkCredentials(emailTextController.text,
+                          passwordTextController.text)) {
+                        errorMessage = 'Email ou mot de passe incorrect';
+                      } else {
+                        navigateToPage(context, const HomePage());
+                      }
+                    });
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0XFF003869),
@@ -139,7 +141,7 @@ class _LoginPageState extends State<LoginPage> {
               // forgot password
               TextButton(
                 onPressed: () {
-                  navigateToPage(context, const ForgotPasswordPage());
+                  navigateToPageWithBack(context, const ContactPage());
                 },
                 child: const Text(
                   'Mot de passe oublié ?',
