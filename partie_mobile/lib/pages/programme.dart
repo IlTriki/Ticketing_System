@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'dart:collection';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class ProgrammePage extends StatefulWidget {
   const ProgrammePage({Key? key}) : super(key: key);
@@ -10,16 +12,11 @@ class ProgrammePage extends StatefulWidget {
 }
 
 class _ProgrammePageState extends State<ProgrammePage> {
-  Map<DateTime, List> _eventsList = {};
-  Map<DateTime, List> _eventsDescrip = {};
+  late double screenWidth;
+  late List<Ticket> _tickets;
   DateTime _focused = DateTime.now();
   DateTime? _selected;
   late CalendarFormat _calendarFormat;
-  late double screenWidth;
-
-  int getHashCode(DateTime key) {
-    return key.day * 1000000 + key.month * 10000 + key.year;
-  }
 
   @override
   void didChangeDependencies() {
@@ -32,122 +29,31 @@ class _ProgrammePageState extends State<ProgrammePage> {
     super.initState();
     _calendarFormat = CalendarFormat.week;
     _selected = _focused;
-    _eventsList = {
-      DateTime.now().subtract(const Duration(days: 5)): [
-        'Changement pièce imprimante',
-        'Maintenance Ecran Open Space'
-      ],
-      DateTime.now().subtract(const Duration(days: 4)): [
-        'Installation imprimante'
-      ],
-      DateTime.now().subtract(const Duration(days: 3)): [
-        'Installation imprimante scanner Recoh'
-      ],
-      DateTime.now().subtract(const Duration(days: 2)): [
-        'Installation écran connecté'
-      ],
-      DateTime.now().subtract(const Duration(days: 1)): ['Maintenance scanner'],
-      DateTime.now(): ['Réparation imprimante'],
-      DateTime.now().add(const Duration(days: 1)): [
-        'Maintenance écran intéractif',
-        'Installation imprimante scanner Recoh'
-      ],
-      DateTime.now().add(const Duration(days: 2)): [
-        'Maintenance écran intéractif'
-      ],
-      DateTime.now().add(const Duration(days: 3)): [
-        'Maintenance écran intéractif',
-        'Installation imprimante scanner Recoh'
-      ],
-      DateTime.now().add(const Duration(days: 4)): [
-        'Maintenance écran intéractif'
-      ],
-    };
-    _eventsDescrip = {
-      DateTime.now().subtract(const Duration(days: 5)): [
-        'Fnac Saint Jacques',
-        '12:00 - 16:00',
-        DateTime.now().subtract(const Duration(days: 5)),
-        'Fnac Saint Jacques',
-        '12:00 - 16:00',
-        DateTime.now().subtract(const Duration(days: 5))
-      ],
-      DateTime.now().subtract(const Duration(days: 4)): [
-        'Fnac Saint Jacques',
-        '12:00 - 16:00',
-        DateTime.now().subtract(const Duration(days: 4))
-      ],
-      DateTime.now().subtract(const Duration(days: 3)): [
-        'Fnac Saint Jacques',
-        '12:00 - 16:00',
-        DateTime.now().subtract(const Duration(days: 3))
-      ],
-      DateTime.now().subtract(const Duration(days: 2)): [
-        'Préfecture de Police',
-        '12:00 - 16:00',
-        DateTime.now().subtract(const Duration(days: 2))
-      ],
-      DateTime.now().subtract(const Duration(days: 1)): [
-        'Siège de Google',
-        '12:00 - 16:00',
-        DateTime.now().subtract(const Duration(days: 1))
-      ],
-      DateTime.now(): ['IUT de Metz', '15:30 - 16:30', DateTime.now()],
-      DateTime.now().add(const Duration(days: 1)): [
-        'Siège de Google',
-        '12:00 - 16:00',
-        DateTime.now().add(const Duration(days: 1)),
-        'Siège de Google',
-        '12:00 - 16:00',
-        DateTime.now().add(const Duration(days: 1)),
-        'Siège de Google',
-        '12:00 - 16:00',
-        DateTime.now().add(const Duration(days: 1)),
-        'Siège de Google',
-        '12:00 - 16:00',
-        DateTime.now().add(const Duration(days: 1))
-      ],
-      DateTime.now().add(const Duration(days: 2)): [
-        'Siège de Google',
-        '12:00 - 16:00',
-        DateTime.now().add(const Duration(days: 2))
-      ],
-      DateTime.now().add(const Duration(days: 3)): [
-        'Siège de Google',
-        '12:00 - 16:00',
-        DateTime.now().add(const Duration(days: 3)),
-        'Siège de Google',
-        '12:00 - 16:00',
-        DateTime.now().add(const Duration(days: 3))
-      ],
-      DateTime.now().add(const Duration(days: 4)): [
-        'Siège de Google',
-        '12:00 - 16:00',
-        DateTime.now().add(const Duration(days: 4))
-      ],
-    };
+    _tickets = [];
+  }
+
+  Future<void> _fetchTickets(DateTime date) async {
+    String formattedDate =
+        "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
+    final response = await http.get(
+      Uri.parse(
+          'https://100.74.7.89:3000/tickets-technicien/700a5357-8146-4eb7-a019-916da0f2b462/$formattedDate'),
+    );
+
+    if (response.statusCode == 200) {
+      final List<dynamic> jsonData = jsonDecode(response.body);
+
+      setState(() {
+        _tickets =
+            jsonData.map((ticketData) => Ticket.fromJson(ticketData)).toList();
+      });
+    } else {
+      throw Exception('Failed to load tickets');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final events = LinkedHashMap<DateTime, List>(
-      equals: isSameDay,
-      hashCode: getHashCode,
-    )..addAll(_eventsList);
-
-    final eventsDesc = LinkedHashMap<DateTime, List>(
-      equals: isSameDay,
-      hashCode: getHashCode,
-    )..addAll(_eventsDescrip);
-
-    List getEventDesc(DateTime day) {
-      return eventsDesc[day] ?? [];
-    }
-
-    List getEvent(DateTime day) {
-      return events[day] ?? [];
-    }
-
     return Scaffold(
       backgroundColor: const Color(0xFFFFFFFF),
       body: Container(
@@ -156,71 +62,120 @@ class _ProgrammePageState extends State<ProgrammePage> {
           backgroundColor: const Color(0xFFFFFFFF),
           body: Center(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 _title(),
-                SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TableCalendar(
-                        firstDay: DateTime.utc(2022, 4, 1),
-                        lastDay: DateTime.utc(2025, 12, 31),
-                        eventLoader: getEvent,
-                        calendarFormat: _calendarFormat,
-                        onFormatChanged: (format) {
-                          setState(() {
-                            _calendarFormat = format;
-                          });
-                        },
-                        selectedDayPredicate: (day) {
-                          return isSameDay(_selected, day);
-                        },
-                        onDaySelected: (selected, focused) {
-                          if (!isSameDay(_selected, selected)) {
-                            setState(() {
-                              _selected = selected;
-                              _focused = focused;
-                            });
-                          }
-                        },
-                        focusedDay: _focused,
-                      ),
-                      ListView(
-                        shrinkWrap: true,
-                        children: getEvent(_selected!)
-                            .map((event) => ListTile(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10)),
-                                  tileColor:
-                                      const Color.fromARGB(169, 206, 206, 206),
-                                  title: Text(event.toString()),
-                                ))
-                            .toList(),
-                      ),
-                      ListView(
-                        shrinkWrap: true,
-                        padding: const EdgeInsets.only(
-                          bottom: 30,
-                          right: 30,
-                          left: 30,
-                          top: 20,
-                        ),
-                        children: getEventDesc(_selected!)
-                            .map((event) => ListTile(
-                                  tileColor:
-                                      const Color.fromARGB(255, 143, 88, 214),
-                                  title: Text(event.toString()),
-                                ))
-                            .toList(),
-                      )
-                    ],
-                  ),
+                TableCalendar(
+                  firstDay: DateTime.utc(2022, 4, 1),
+                  lastDay: DateTime.utc(2025, 12, 31),
+                  calendarFormat: _calendarFormat,
+                  selectedDayPredicate: (day) {
+                    return isSameDay(_selected, day);
+                  },
+                  onDaySelected: (selected, focused) {
+                    if (!isSameDay(_selected, selected)) {
+                      setState(() {
+                        _selected = selected;
+                        _focused = focused;
+                      });
+                      _fetchTickets(selected);
+                    }
+                  },
+                  onFormatChanged: (format) {
+                    setState(() {
+                      _calendarFormat = format;
+                    });
+                  },
+                  focusedDay: _focused,
                 ),
+                _buildTicketList(),
               ],
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildTicketList() {
+    return Expanded(
+      child: ListView.builder(
+        itemCount: _tickets.length,
+        itemBuilder: (context, index) {
+          final ticket = _tickets[index];
+          return Container(
+            margin: const EdgeInsets.only(
+              bottom: 10,
+              right: 30,
+              left: 30,
+              top: 10,
+            ),
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: const Color.fromRGBO(133, 114, 255, 1),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Row(
+              children: [
+                Column(
+                  children: [
+                    SvgPicture.asset(
+                      'assets/icons/programmePlanning.svg',
+                      height: 50,
+                      width: 50,
+                    ),
+                  ],
+                ),
+                const SizedBox(width: 20),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      ticket.nom,
+                      textAlign: TextAlign.left,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(height: 10, width: 10),
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.access_time,
+                          color: Colors.white,
+                          size: 20,
+                        ),
+                        const SizedBox(width: 10),
+                        Text(
+                          ticket.date.split('T')[1].split(':00.')[0],
+                          style: const TextStyle(
+                            fontSize: 20,
+                            color: Colors.white,
+                          ),
+                        ),
+                        const SizedBox(width: 20),
+                        const Icon(
+                          Icons.calendar_today,
+                          color: Colors.white,
+                          size: 20,
+                        ),
+                        const SizedBox(width: 10),
+                        Text(
+                          ticket.date.split('T')[0],
+                          style: const TextStyle(
+                            fontSize: 20,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }
@@ -242,6 +197,23 @@ class _ProgrammePageState extends State<ProgrammePage> {
           fontWeight: FontWeight.w600,
         ),
       ),
+    );
+  }
+}
+
+class Ticket {
+  final String nom;
+  final String date;
+
+  Ticket({
+    required this.nom,
+    required this.date,
+  });
+
+  factory Ticket.fromJson(Map<String, dynamic> json) {
+    return Ticket(
+      nom: json['Probleme'] ?? '',
+      date: json['DateRdv'] ?? '',
     );
   }
 }

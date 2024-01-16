@@ -22,8 +22,8 @@ class _ProfilPageState extends State<ProfilPage> {
 
   Future<void> fetchData() async {
     try {
-      final response = await http
-          .get(Uri.parse('https://100.74.7.89:3000/info-technicien/1'));
+      final response = await http.get(Uri.parse(
+          'https://100.74.7.89:3000/info-technicien/700a5357-8146-4eb7-a019-916da0f2b462'));
 
       if (response.statusCode == 200) {
         List<Map<String, dynamic>> data =
