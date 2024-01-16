@@ -48,7 +48,7 @@ class _ProgrammePageState extends State<ProgrammePage> {
       DateTime.now().subtract(const Duration(days: 2)): ['Préfecture de Police','12:00 - 16:00', DateTime.now().subtract(const Duration(days: 2))],
       DateTime.now().subtract(const Duration(days: 1)): ['Siège de Google','12:00 - 16:00', DateTime.now().subtract(const Duration(days: 1))],
       DateTime.now(): ['IUT de Metz','15:30 - 16:30', DateTime.now()],
-      DateTime.now().add(const Duration(days: 1)): ['Siège de Google','12:00 - 16:00', DateTime.now().add(const Duration(days: 1)), 'Siège de Google','12:00 - 16:00', DateTime.now().add(const Duration(days: 3))],
+      DateTime.now().add(const Duration(days: 1)): ['Siège de Google','12:00 - 16:00', DateTime.now().add(const Duration(days: 1)), 'Siège de Google','12:00 - 16:00', DateTime.now().add(const Duration(days: 1)), 'Siège de Google','12:00 - 16:00', DateTime.now().add(const Duration(days: 1)), 'Siège de Google','12:00 - 16:00', DateTime.now().add(const Duration(days: 1))],
       DateTime.now().add(const Duration(days: 2)): ['Siège de Google','12:00 - 16:00', DateTime.now().add(const Duration(days: 2))],
       DateTime.now().add(const Duration(days: 3)): ['Siège de Google','12:00 - 16:00', DateTime.now().add(const Duration(days: 3)), 'Siège de Google','12:00 - 16:00', DateTime.now().add(const Duration(days: 3))],
       DateTime.now().add(const Duration(days: 4)): ['Siège de Google','12:00 - 16:00', DateTime.now().add(const Duration(days: 4))],
@@ -76,56 +76,61 @@ class _ProgrammePageState extends State<ProgrammePage> {
     }
 
     return Scaffold(
-      body: Column(
-        children: [
-          TableCalendar(
-            firstDay: DateTime.utc(2022, 4, 1),
-            lastDay: DateTime.utc(2025, 12, 31),
-            eventLoader: getEvent,
-            calendarFormat: _calendarFormat,
-            onFormatChanged: (format) {
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TableCalendar(
+              firstDay: DateTime.utc(2022, 4, 1),
+              lastDay: DateTime.utc(2025, 12, 31),
+              eventLoader: getEvent,
+              calendarFormat: _calendarFormat,
+              onFormatChanged: (format) {
                 setState(() {
                 _calendarFormat = format;
                 });
-            },
-            selectedDayPredicate: (day) {
-              return isSameDay(_selected, day);
-            },
-            onDaySelected: (selected, focused) {
-              if (!isSameDay(_selected, selected)) {
-                setState(() {
-                  _selected = selected;
-                  _focused = focused;
-                });
-              }
-            },
-            focusedDay: _focused,
-          ),
-          ListView(
-            shrinkWrap: true,
-            children: getEvent(_selected!)
-                .map((event) => ListTile(
+              },
+              selectedDayPredicate: (day) {
+                return isSameDay(_selected, day);
+              },
+              onDaySelected: (selected, focused) {
+                if (!isSameDay(_selected, selected)) {
+                  setState(() {
+                    _selected = selected;
+                    _focused = focused;
+                  });
+                }
+              },
+              focusedDay: _focused,
+            ),
+            ListView(
+              shrinkWrap: true,
+              children: getEvent(_selected!)
+                  .map((event) => ListTile(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      tileColor: Color.fromARGB(169, 206, 206, 206),
                       title: Text(event.toString()),
                     ))
                 .toList(),
-          ),
-          ListView(
-            shrinkWrap: true,
-            padding: const EdgeInsets.only(
+            ),
+            ListView(
+              shrinkWrap: true,
+              padding: const EdgeInsets.only(
                     bottom: 30,
                     right: 30,
                     left: 30,
                     top: 20,
-            ),
-            children: getEventDesc(_selected!)
+              ),
+              children: getEventDesc(_selected!)
                 .map((event) => ListTile(
-                      tileColor: Color.fromARGB(169, 154, 84, 201),
+                      tileColor: Color.fromARGB(255, 143, 88, 214),
                       title: Text(event.toString()),
                     ))
                 .toList(),
-          )
+            )
         ],
       ),
+    ),
     );
   }
 }
