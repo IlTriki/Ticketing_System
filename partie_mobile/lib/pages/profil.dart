@@ -32,7 +32,7 @@ class _ProfilPageState extends State<ProfilPage> {
         setState(() {
           profilData = data.map((item) {
             return {
-              'photo': 'https://100.74.7.89:3000/images/${item['Photo']}.jpg',
+              'photo': 'https://100.74.7.89:3000/images/${item['Photo']}.png',
               'nom': item['nom'],
               'prenom': item['prenom'],
               'numero': item['numero'],

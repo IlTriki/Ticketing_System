@@ -28,8 +28,9 @@ class _ProgrammePageState extends State<ProgrammePage> {
   void initState() {
     super.initState();
     _calendarFormat = CalendarFormat.week;
-    _selected = _focused;
+    _selected = DateTime.now();
     _tickets = [];
+    _fetchTickets(_selected!);
   }
 
   Future<void> _fetchTickets(DateTime date) async {
@@ -43,9 +44,14 @@ class _ProgrammePageState extends State<ProgrammePage> {
     if (response.statusCode == 200) {
       final List<dynamic> jsonData = jsonDecode(response.body);
 
+      List<Ticket> tickets =
+          jsonData.map((ticketData) => Ticket.fromJson(ticketData)).toList();
+
+      tickets
+          .sort((a, b) => a.date.split('T')[1].compareTo(b.date.split('T')[1]));
+
       setState(() {
-        _tickets =
-            jsonData.map((ticketData) => Ticket.fromJson(ticketData)).toList();
+        _tickets = tickets;
       });
     } else {
       throw Exception('Failed to load tickets');

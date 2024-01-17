@@ -1,10 +1,12 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:partie_mobile/models/chrono_programme.dart';
+import 'package:geocoding/geocoding.dart';
 
 class AccueilPage extends StatefulWidget {
   const AccueilPage({Key? key}) : super(key: key);
@@ -16,6 +18,8 @@ class AccueilPage extends StatefulWidget {
 class _AccueilPageState extends State<AccueilPage> {
   late double screenWidth;
   List<Map<String, dynamic>> programmes = [];
+  // les horaires de depart, d'arrivee et la duree d'entretien du ticket
+  DateTime? heureDepart;
 
   @override
   void didChangeDependencies() {
@@ -25,8 +29,11 @@ class _AccueilPageState extends State<AccueilPage> {
   }
 
   Future<void> fetchData() async {
+    final date = DateTime.now();
+    String formattedDate =
+        "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
     final response = await http.get(Uri.parse(
-        'https://100.74.7.89:3000/tickets-technicien/700a5357-8146-4eb7-a019-916da0f2b462'));
+        'https://100.74.7.89:3000/tickets-technicien-progJour/700a5357-8146-4eb7-a019-916da0f2b462/$formattedDate'));
 
     if (response.statusCode == 200) {
       List<Map<String, dynamic>> data =
@@ -35,9 +42,10 @@ class _AccueilPageState extends State<AccueilPage> {
       setState(() {
         programmes = data.map((item) {
           return {
+            'id': item["Id"],
             'priorite': "assets/icons/priorite${item['Priority']}.svg",
-            'horaire': DateFormat('HH:mm')
-                .format(DateTime.parse(item['DateCreation'])),
+            'horaire':
+                "${item['HeureDebutCreneau'].toString().substring(0, 5)}-${item['HeureFinCreneau'].toString().substring(0, 5)}",
             'nom': item['Probleme'],
             'adresse': item['Adresse'],
             'lieu': item['Lieu'],
@@ -192,8 +200,15 @@ class _AccueilPageState extends State<AccueilPage> {
                             bottom: 0,
                             right: 0,
                             child: GestureDetector(
-                              onTap: () {
-                                launchUrlString('https://www.google.com/maps');
+                              onTap: () async {
+                                heureDepart = DateTime.now();
+                                List<Location> locations =
+                                    await getCoordinatesFromAddress(
+                                        programmes[index]['adresse']);
+                                if (locations.isNotEmpty) {
+                                  launchWazeRoute(locations[0].latitude,
+                                      locations[0].longitude);
+                                }
                               },
                               child: SvgPicture.asset(
                                 'assets/icons/boutonGo.svg',
@@ -211,6 +226,7 @@ class _AccueilPageState extends State<AccueilPage> {
                                   context: context,
                                   builder: (context) => TicketDetailsPage(
                                     ticketDetails: programmes[index],
+                                    heureDepart: heureDepart,
                                   ),
                                 );
                               },
@@ -229,5 +245,33 @@ class _AccueilPageState extends State<AccueilPage> {
         ),
       ],
     );
+  }
+}
+
+Future<List<Location>> getCoordinatesFromAddress(String adresse) async {
+  try {
+    List<Location> locations = await locationFromAddress(adresse);
+    return locations;
+  } catch (error) {
+    print(error);
+    return [];
+  }
+}
+
+Future<void> launchWazeRoute(double lat, double lng) async {
+  var url = 'waze://?ll=${lat.toString()},${lng.toString()}';
+  var fallbackUrl =
+      'https://waze.com/ul?ll=${lat.toString()},${lng.toString()}&navigate=yes';
+
+  try {
+    bool launched = false;
+    if (!kIsWeb) {
+      launched = await launchUrl(Uri.parse(url));
+    }
+    if (!launched) {
+      await launchUrl(Uri.parse(fallbackUrl));
+    }
+  } catch (e) {
+    await launchUrl(Uri.parse(fallbackUrl));
   }
 }

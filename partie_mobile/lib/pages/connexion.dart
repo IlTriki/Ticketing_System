@@ -26,10 +26,14 @@ class _LoginPageState extends State<LoginPage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
+              SizedBox(height: MediaQuery.of(context).size.height * 0.030),
               // Logo
-              const Image(
-                image: AssetImage('assets/images/logo_ck_grp.png'),
-                height: 150,
+              Container(
+                margin: const EdgeInsets.all(20),
+                child: Image(
+                  image: const AssetImage('assets/images/logoSAEvFinale.png'),
+                  width: MediaQuery.of(context).size.width * 0.8,
+                ),
               ),
 
               // Message de bienvenue
@@ -117,6 +121,7 @@ class _LoginPageState extends State<LoginPage> {
                           passwordTextController.text)) {
                         errorMessage = 'Email ou mot de passe incorrect';
                       } else {
+                        FocusScope.of(context).unfocus();
                         navigateToPage(context, const HomePage());
                       }
                     });

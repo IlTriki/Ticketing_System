@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class TicketDetailsPage extends StatefulWidget {
   final Map<String, dynamic> ticketDetails;
+  DateTime? heureDepart;
 
-  const TicketDetailsPage({Key? key, required this.ticketDetails})
+  TicketDetailsPage({Key? key, required this.ticketDetails, this.heureDepart})
       : super(key: key);
 
   @override
@@ -13,9 +16,9 @@ class TicketDetailsPage extends StatefulWidget {
 
 class _TicketDetailsPageState extends State<TicketDetailsPage> {
   final StopWatchTimer _stopWatchTimer = StopWatchTimer();
-  var heureDebut;
-  var heureFin;
-  var duree;
+  DateTime? heureDebut;
+  DateTime? heureFin;
+  Duration? duree;
 
   @override
   Widget build(BuildContext context) {
@@ -112,8 +115,16 @@ class _TicketDetailsPageState extends State<TicketDetailsPage> {
                   setState(() {
                     if (heureDebut != null) {
                       if (heureFin == null) {
+                        widget.heureDepart ??= heureDebut;
                         heureFin = DateTime.now();
-                        duree = heureFin.difference(heureDebut);
+                        duree = heureFin?.difference(heureDebut!);
+
+                        updateTicketDetails(
+                          widget.ticketDetails['id'].toString(),
+                          heureDebut,
+                          heureFin,
+                          duree,
+                        );
                       }
                     }
                   });
@@ -132,6 +143,7 @@ class _TicketDetailsPageState extends State<TicketDetailsPage> {
                     heureDebut = null;
                     heureFin = null;
                     duree = null;
+                    widget.heureDepart = null;
                   });
                   Navigator.of(context).pop();
                 },
@@ -147,5 +159,30 @@ class _TicketDetailsPageState extends State<TicketDetailsPage> {
         ],
       ),
     );
+  }
+
+  Future<void> updateTicketDetails(String ticketId, DateTime? dateDepart,
+      DateTime? dateArrivee, Duration? duree) async {
+    final apiUrl = 'https://100.74.7.89:3000/update-rdv/$ticketId';
+
+    try {
+      final response = await http.put(
+        Uri.parse(apiUrl),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({
+          'DateDepart': dateDepart?.toIso8601String(),
+          'DateArrivee': dateArrivee?.toIso8601String(),
+          'Duree': duree.toString(),
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        print('Ticket updated successfully');
+      } else {
+        print('Failed to update ticket. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error updating ticket: $e');
+    }
   }
 }

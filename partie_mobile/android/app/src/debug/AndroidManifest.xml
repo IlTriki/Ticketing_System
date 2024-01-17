@@ -11,9 +11,10 @@
     <!--adding permission for email -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
     <!--adding enableOnBackInvokedCallback -->
     <application
-        android:label="CK Group"
+        android:label="Techniplan"
         android:name="io.flutter.app.FlutterApplication"
         android:icon="@mipmap/ic_launcher"
         android:enableOnBackInvokedCallback="true"
