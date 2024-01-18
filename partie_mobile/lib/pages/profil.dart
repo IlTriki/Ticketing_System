@@ -3,7 +3,9 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class ProfilPage extends StatefulWidget {
-  const ProfilPage({Key? key}) : super(key: key);
+  final String objectId;
+
+  const ProfilPage({Key? key, required this.objectId}) : super(key: key);
 
   @override
   _ProfilPageState createState() => _ProfilPageState();
@@ -23,7 +25,7 @@ class _ProfilPageState extends State<ProfilPage> {
   Future<void> fetchData() async {
     try {
       final response = await http.get(Uri.parse(
-          'https://100.74.7.89:3000/info-technicien/700a5357-8146-4eb7-a019-916da0f2b462'));
+          'https://100.74.7.89:3000/info-technicien/${widget.objectId}'));
 
       if (response.statusCode == 200) {
         List<Map<String, dynamic>> data =

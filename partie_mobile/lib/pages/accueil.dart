@@ -9,7 +9,9 @@ import 'package:partie_mobile/models/chrono_programme.dart';
 import 'package:geocoding/geocoding.dart';
 
 class AccueilPage extends StatefulWidget {
-  const AccueilPage({Key? key}) : super(key: key);
+  final String objectId;
+
+  const AccueilPage({Key? key, required this.objectId}) : super(key: key);
 
   @override
   _AccueilPageState createState() => _AccueilPageState();
@@ -33,7 +35,7 @@ class _AccueilPageState extends State<AccueilPage> {
     String formattedDate =
         "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
     final response = await http.get(Uri.parse(
-        'https://100.74.7.89:3000/tickets-technicien-progJour/700a5357-8146-4eb7-a019-916da0f2b462/$formattedDate'));
+        'https://100.74.7.89:3000/tickets-technicien-progJour/${widget.objectId}/$formattedDate'));
 
     if (response.statusCode == 200) {
       List<Map<String, dynamic>> data =

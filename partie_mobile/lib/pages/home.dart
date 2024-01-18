@@ -15,13 +15,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       title: 'BottomNavigationBar Example',
-      home: HomePage(),
+      home: HomePage(objectId: ''),
     );
   }
 }
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  final String objectId;
+
+  const HomePage({Key? key, required this.objectId}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -30,12 +32,18 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
 
-  final List<Widget> _pages = [
-    const AccueilPage(),
-    const ProgrammePage(),
-    const ContactPage(),
-    const ProfilPage(),
-  ];
+  late final List<Widget> _pages;
+
+  @override
+  void initState() {
+    super.initState();
+    _pages = [
+      AccueilPage(objectId: widget.objectId),
+      ProgrammePage(objectId: widget.objectId),
+      const ContactPage(),
+      ProfilPage(objectId: widget.objectId),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {

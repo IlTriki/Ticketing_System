@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:partie_mobile/models/credential_checkers.dart';
+import 'package:partie_mobile/main.dart';
 import 'package:partie_mobile/models/navigator_function.dart';
 import 'package:partie_mobile/models/text_field.dart';
 import 'package:partie_mobile/pages/contact.dart';
 import 'package:partie_mobile/pages/home.dart';
+import 'package:aad_oauth/model/config.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -17,6 +20,22 @@ class _LoginPageState extends State<LoginPage> {
   final emailTextController = TextEditingController();
   final passwordTextController = TextEditingController();
   var errorMessage = '';
+
+  static final Config config = Config(
+    tenant: '606b4859-aaa5-49d1-b841-d026b1053dc8',
+    clientId: 'f587a308-979f-450f-bd3a-9307e7cbeccb',
+    clientSecret: 'Nnq8Q~-AVcTe1AwmzledAWvEqN1s2xAhbx~X_bC_',
+    scope: 'openid profile offline_access User.Read',
+    redirectUri: 'https://100.74.7.89/technicien/',
+    navigatorKey: navigatorKey,
+  );
+
+  final AuthService authService = AuthService(
+    authority:
+        "https://login.microsoftonline.com/606b4859-aaa5-49d1-b841-d026b1053dc8/oauth2/token",
+    clientId: config.clientId,
+    clientSecret: config.clientSecret!,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -114,17 +133,27 @@ class _LoginPageState extends State<LoginPage> {
                 child: ElevatedButton(
                   onPressed: () {
                     setState(() {
-                      if (emailTextController.text.isEmpty ||
-                          passwordTextController.text.isEmpty) {
-                        errorMessage = 'Veuillez remplir tous les champs';
-                      } else if (!checkCredentials(emailTextController.text,
-                          passwordTextController.text)) {
-                        errorMessage = 'Email ou mot de passe incorrect';
-                      } else {
-                        FocusScope.of(context).unfocus();
-                        navigateToPage(context, const HomePage());
-                      }
+                      errorMessage = '';
                     });
+
+                    if (emailTextController.text.isEmpty ||
+                        passwordTextController.text.isEmpty) {
+                      setState(() {
+                        errorMessage = 'Veuillez remplir tous les champs';
+                      });
+                    } else {
+                      FocusScope.of(context).unfocus();
+                      authService.performROPC(
+                        emailTextController.text,
+                        passwordTextController.text,
+                        context,
+                        (String error) {
+                          setState(() {
+                            errorMessage = error;
+                          });
+                        },
+                      );
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0XFF003869),
@@ -136,9 +165,10 @@ class _LoginPageState extends State<LoginPage> {
                   child: const Text(
                     'Connexion',
                     style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
@@ -160,5 +190,61 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+}
+
+class AuthService {
+  final String authority;
+  final String clientId;
+  final String clientSecret;
+
+  AuthService({
+    required this.authority,
+    required this.clientId,
+    required this.clientSecret,
+  });
+
+  Future<void> performROPC(String username, String password,
+      BuildContext context, Function(String) errorCallback) async {
+    final Map<String, dynamic> body = {
+      'grant_type': 'password',
+      'client_id': clientId,
+      'client_secret': clientSecret,
+      'scope': 'openid profile offline_access User.Read',
+      'username': username,
+      'password': password,
+    };
+
+    final response = await http.post(
+      Uri.parse(
+          'https://login.microsoftonline.com/606b4859-aaa5-49d1-b841-d026b1053dc8/oauth2/v2.0/token'),
+      body: body,
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+    );
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> tokenData = json.decode(response.body);
+      final String accessToken = tokenData['access_token'];
+      getUserObjectId(accessToken, context);
+    } else {
+      errorCallback("Mot de passe ou email incorrect");
+    }
+  }
+
+  void getUserObjectId(String accessToken, BuildContext context) async {
+    const graphApiEndpoint = 'https://graph.microsoft.com/v1.0/me';
+
+    final response = await http.get(
+      Uri.parse(graphApiEndpoint),
+      headers: {
+        'Authorization': 'Bearer $accessToken',
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> userData = json.decode(response.body);
+      final String objectId = userData['id'];
+      navigateToPage(context, HomePage(objectId: objectId));
+    } else {}
   }
 }

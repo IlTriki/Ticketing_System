@@ -1,16 +1,17 @@
 import 'package:aad_oauth/aad_oauth.dart';
 import 'package:aad_oauth/model/config.dart';
-import 'package:aad_oauth/model/token.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-void main() => runApp(MyApp());
+void main() => runApp(const MyApp());
 
 final navigatorKey = GlobalKey<NavigatorState>();
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -18,14 +19,14 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'AAD OAuth Home'),
+      home: const MyHomePage(title: 'AAD OAuth Home'),
       navigatorKey: navigatorKey,
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({super.key, required this.title});
+  const MyHomePage({super.key, required this.title});
   final String title;
 
   @override
@@ -41,9 +42,9 @@ class _MyHomePageState extends State<MyHomePage> {
     redirectUri:
         'https://100.74.7.89/technicien/', // Set your custom redirect URI
     navigatorKey: navigatorKey,
-    loader: SizedBox(),
+    loader: const SizedBox(),
     appBar: AppBar(
-      title: Text('AAD OAuth Demo'),
+      title: const Text('AAD OAuth Demo'),
     ),
   );
 
@@ -64,28 +65,28 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
           ListTile(
-            leading: Icon(Icons.launch),
-            title: Text('Login${kIsWeb ? ' (web popup)' : ''}'),
+            leading: const Icon(Icons.launch),
+            title: const Text('Login${kIsWeb ? ' (web popup)' : ''}'),
             onTap: () {
               login(false);
             },
           ),
           if (kIsWeb)
             ListTile(
-              leading: Icon(Icons.launch),
-              title: Text('Login (web redirect)'),
+              leading: const Icon(Icons.launch),
+              title: const Text('Login (web redirect)'),
               onTap: () {
                 login(true);
               },
             ),
           ListTile(
-            leading: Icon(Icons.data_array),
-            title: Text('HasCachedAccountInformation'),
+            leading: const Icon(Icons.data_array),
+            title: const Text('HasCachedAccountInformation'),
             onTap: () => hasCachedAccountInformation(),
           ),
           ListTile(
-            leading: Icon(Icons.logout),
-            title: Text('Logout'),
+            leading: const Icon(Icons.logout),
+            title: const Text('Logout'),
             onTap: () {
               logout();
             },
@@ -117,7 +118,7 @@ class _MyHomePageState extends State<MyHomePage> {
       (l) => showError(l.toString()),
       (r) {
         showMessage('Logged in successfully, your access token: $r');
-        Future.delayed(Duration(seconds: 2), () async {
+        Future.delayed(const Duration(seconds: 2), () async {
           var accessToken = await oauth.getAccessToken();
           if (accessToken != null) {
             ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -152,7 +153,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void getUserObjectId(String accessToken) async {
-    final graphApiEndpoint = 'https://graph.microsoft.com/v1.0/me';
+    const graphApiEndpoint = 'https://graph.microsoft.com/v1.0/me';
 
     final response = await http.get(
       Uri.parse(graphApiEndpoint),

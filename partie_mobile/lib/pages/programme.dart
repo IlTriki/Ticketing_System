@@ -5,7 +5,9 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class ProgrammePage extends StatefulWidget {
-  const ProgrammePage({Key? key}) : super(key: key);
+  final String objectId;
+
+  const ProgrammePage({Key? key, required this.objectId}) : super(key: key);
 
   @override
   State<ProgrammePage> createState() => _ProgrammePageState();
@@ -38,7 +40,7 @@ class _ProgrammePageState extends State<ProgrammePage> {
         "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
     final response = await http.get(
       Uri.parse(
-          'https://100.74.7.89:3000/tickets-technicien/700a5357-8146-4eb7-a019-916da0f2b462/$formattedDate'),
+          'https://100.74.7.89:3000/tickets-technicien/${widget.objectId}/$formattedDate'),
     );
 
     if (response.statusCode == 200) {
