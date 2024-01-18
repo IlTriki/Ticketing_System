@@ -37,7 +37,7 @@ class _MyHomePageState extends State<MyHomePage> {
     tenant: '606b4859-aaa5-49d1-b841-d026b1053dc8',
     clientId: 'f587a308-979f-450f-bd3a-9307e7cbeccb',
     clientSecret: 'Nnq8Q~-AVcTe1AwmzledAWvEqN1s2xAhbx~X_bC_',
-    scope: 'api://f587a308-979f-450f-bd3a-9307e7cbeccb/Users.Read',
+    scope: 'openid profile offline_access User.Read',
     redirectUri:
         'https://100.74.7.89/technicien/', // Set your custom redirect URI
     navigatorKey: navigatorKey,
@@ -178,18 +178,30 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void decodeAccessToken(String accessToken) {
-    try {
-      final parts = accessToken.split('.');
-      if (parts.length != 3) {
-        print('Invalid token format');
-        return;
-      }
+    final parts = accessToken.split('.');
+    if (parts.length != 3) {
+      print('Invalid token format');
+      return;
+    }
 
-      final String decodedPayload =
-          utf8.decode(base64Url.decode(base64Url.normalize(parts[1])));
-      print('Decoded Payload: $decodedPayload');
-    } catch (e) {
-      print('Error decoding access token: $e');
+    final payload = parts[1];
+    // Ensure proper padding for Base64 decoding
+    final int padLength = (4 - payload.length % 4) % 4;
+    final String paddedPayload = payload + '=' * padLength;
+    final String decodedPayload =
+        String.fromCharCodes(base64Url.decode(paddedPayload));
+    print('Decoded Payload: $decodedPayload');
+
+    final Map<String, dynamic> payloadMap = json.decode(decodedPayload);
+    final String audience = payloadMap['aud'];
+
+    // Check if the audience matches your expected client ID
+    if (audience == 'f587a308-979f-450f-bd3a-9307e7cbeccb') {
+      print('Valid audience: $audience');
+      // Continue processing the token...
+    } else {
+      print('Invalid audience: $audience');
+      // Handle invalid audience...
     }
   }
 }
