@@ -39,8 +39,7 @@ class _ProgrammePageState extends State<ProgrammePage> {
     String formattedDate =
         "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
     final response = await http.get(
-      Uri.parse(
-          'https://100.74.7.89:3000/tickets-technicien/${widget.objectId}/$formattedDate'),
+      Uri.parse('your_url/${widget.objectId}/$formattedDate'),
     );
 
     if (response.statusCode == 200) {
@@ -170,7 +169,10 @@ class _ProgrammePageState extends State<ProgrammePage> {
                         ),
                         const SizedBox(width: 10),
                         Text(
-                          ticket.date.split('T')[0],
+                          DateTime.parse(ticket.date)
+                              .toLocal()
+                              .toString()
+                              .split(' ')[0],
                           style: const TextStyle(
                             fontSize: 20,
                             color: Colors.white,

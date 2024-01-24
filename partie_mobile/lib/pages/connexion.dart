@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:partie_mobile/main.dart';
 import 'package:partie_mobile/models/navigator_function.dart';
 import 'package:partie_mobile/models/text_field.dart';
 import 'package:partie_mobile/pages/contact.dart';
 import 'package:partie_mobile/pages/home.dart';
-import 'package:aad_oauth/model/config.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
@@ -21,20 +19,16 @@ class _LoginPageState extends State<LoginPage> {
   final passwordTextController = TextEditingController();
   var errorMessage = '';
 
-  static final Config config = Config(
-    tenant: '606b4859-aaa5-49d1-b841-d026b1053dc8',
-    clientId: 'f587a308-979f-450f-bd3a-9307e7cbeccb',
-    clientSecret: 'Nnq8Q~-AVcTe1AwmzledAWvEqN1s2xAhbx~X_bC_',
-    scope: 'openid profile offline_access User.Read',
-    redirectUri: 'https://100.74.7.89/technicien/',
-    navigatorKey: navigatorKey,
+  static const config = (
+    tenant: 'your_tenant_id',
+    clientId: 'your_client_id',
+    clientSecret: 'your_client_secret',
   );
 
   final AuthService authService = AuthService(
-    authority:
-        "https://login.microsoftonline.com/606b4859-aaa5-49d1-b841-d026b1053dc8/oauth2/token",
+    tenant: config.tenant,
     clientId: config.clientId,
-    clientSecret: config.clientSecret!,
+    clientSecret: config.clientSecret,
   );
 
   @override
@@ -194,12 +188,12 @@ class _LoginPageState extends State<LoginPage> {
 }
 
 class AuthService {
-  final String authority;
+  final String tenant;
   final String clientId;
   final String clientSecret;
 
   AuthService({
-    required this.authority,
+    required this.tenant,
     required this.clientId,
     required this.clientSecret,
   });
@@ -217,7 +211,7 @@ class AuthService {
 
     final response = await http.post(
       Uri.parse(
-          'https://login.microsoftonline.com/606b4859-aaa5-49d1-b841-d026b1053dc8/oauth2/v2.0/token'),
+          'https://login.microsoftonline.com/${tenant}/oauth2/v2.0/token'),
       body: body,
       headers: {'Content-Type': 'application/x-www-form-urlencoded'},
     );

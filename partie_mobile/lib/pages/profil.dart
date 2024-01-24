@@ -24,8 +24,7 @@ class _ProfilPageState extends State<ProfilPage> {
 
   Future<void> fetchData() async {
     try {
-      final response = await http.get(Uri.parse(
-          'https://100.74.7.89:3000/info-technicien/${widget.objectId}'));
+      final response = await http.get(Uri.parse('your_url/${widget.objectId}'));
 
       if (response.statusCode == 200) {
         List<Map<String, dynamic>> data =
@@ -34,7 +33,7 @@ class _ProfilPageState extends State<ProfilPage> {
         setState(() {
           profilData = data.map((item) {
             return {
-              'photo': 'https://100.74.7.89:3000/images/${item['Photo']}.png',
+              'photo': 'your_url/${item['Photo']}.png',
               'nom': item['nom'],
               'prenom': item['prenom'],
               'numero': item['numero'],

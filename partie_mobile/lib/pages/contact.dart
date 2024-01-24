@@ -12,8 +12,8 @@ class ContactPage extends StatefulWidget {
 
 class _ContactPageState extends State<ContactPage> {
   late double screenWidth;
-  final String phoneNumber = '+33646265513';
-  final String emailAddress = 'trikiosama@gmail.com';
+  final String phoneNumber = 'phone_number';
+  final String emailAddress = 'email_address';
   final _controller = PageController();
 
   @override

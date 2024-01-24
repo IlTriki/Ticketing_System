@@ -163,7 +163,7 @@ class _TicketDetailsPageState extends State<TicketDetailsPage> {
 
   Future<void> updateTicketDetails(String ticketId, DateTime? dateDepart,
       DateTime? dateArrivee, Duration? duree) async {
-    final apiUrl = 'https://100.74.7.89:3000/update-rdv/$ticketId';
+    final apiUrl = 'your_url/$ticketId';
 
     try {
       final response = await http.put(

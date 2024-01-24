@@ -20,7 +20,6 @@ class AccueilPage extends StatefulWidget {
 class _AccueilPageState extends State<AccueilPage> {
   late double screenWidth;
   List<Map<String, dynamic>> programmes = [];
-  // les horaires de depart, d'arrivee et la duree d'entretien du ticket
   DateTime? heureDepart;
 
   @override
@@ -34,8 +33,8 @@ class _AccueilPageState extends State<AccueilPage> {
     final date = DateTime.now();
     String formattedDate =
         "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
-    final response = await http.get(Uri.parse(
-        'https://100.74.7.89:3000/tickets-technicien-progJour/${widget.objectId}/$formattedDate'));
+    final response =
+        await http.get(Uri.parse('your_url/${widget.objectId}/$formattedDate'));
 
     if (response.statusCode == 200) {
       List<Map<String, dynamic>> data =
@@ -154,7 +153,7 @@ class _AccueilPageState extends State<AccueilPage> {
                             child: GestureDetector(
                               onTap: () {
                                 launchUrlString(
-                                    'http://support.ricoh.com/bb_v1oi/pub_e/oi/0001031/0001031308/VB23578xx_01/B2357832.pdf');
+                                    'your_url/pdf_support_file.pdf');
                               },
                               child: SvgPicture.asset(
                                 'assets/icons/options.svg',
