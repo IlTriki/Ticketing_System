@@ -19,12 +19,11 @@
 
 <p align="center">
   <a href="#dart-about">About</a> &#xa0; | &#xa0; 
-  <a href="#sparkles-features">Features</a> &#xa0; | &#xa0;
   <a href="#rocket-technologies">Technologies</a> &#xa0; | &#xa0;
+  <a href="#eyes-results">Results</a> &#xa0; | &#xa0;
   <a href="#white_check_mark-requirements">Requirements</a> &#xa0; | &#xa0;
   <a href="#checkered_flag-starting">Starting</a> &#xa0; | &#xa0;
-  <a href="#memo-license">License</a> &#xa0; | &#xa0;
-  <a href="https://github.com/IlTriki" target="_blank">Author</a>
+  <a href="#fountain_pen-authors">Authors</a>
 </p>
 
 <br>
@@ -44,12 +43,6 @@ Il est important de souligner que ce projet est encadré par des contraintes imp
 Conformément aux directives, la réalisation de l'application mobile devrait préférablement utiliser les outils de développement qui seront enseignés dans le quatrième semestre (c'est-à-dire Flutter).
 De plus, la connexion aux systèmes doit être mise en œuvre en intégrant Microsoft Entra ID (Azure AD).
 
-## :sparkles: Features ##
-
-:heavy_check_mark: Feature 1;\
-:heavy_check_mark: Feature 2;\
-:heavy_check_mark: Feature 3;
-
 ## :rocket: Technologies ##
 
 The following tools were used in this project:
@@ -58,6 +51,9 @@ The following tools were used in this project:
 - [Flutter](https://flutter.dev/)
 - [TypeScript](https://www.typescriptlang.org/)
 - [Angular](https://angular.dev/)
+
+## :eyes: Results ##
+
 
 ## :white_check_mark: Requirements ##
 
@@ -72,6 +68,13 @@ $ git clone https://github.com/IlTriki/Ticketing_System
 # The server will initialize in the <http://localhost:3000>
 # The MySql DB and API need to be set up
 ```
+
+## :fountain_pen: Authors ##
+
+- <a href="https://github.com/IlTriki/" target="_blank">TRIKI Osama</a>
+- <a href="https://github.com/NathanChampes" target="_blank">CHAMPES Nathan</a>
+- <a href="https://github.com/nicolamenace" target="_blank">MADEC Nicolas</a>
+- <a href="https://github.com/Wel7" target="_blank">HERGAT Hugo</a>
 
 &#xa0;
 
