@@ -31,7 +31,7 @@ export class TechnicienComponent /*implements OnInit*/{
       (rolesParApp:any) => {
         rolesParApp.value.map((app:any) => {
           this.id =  app.appRoleId;
-          if(this.id != "817ed289-d44f-41b9-a8b9-b334728ae4d2"){
+          if(this.id != "your_app_role_id_here"){
             this.router.navigate([""]);
           }
         })

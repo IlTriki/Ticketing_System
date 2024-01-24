@@ -31,7 +31,7 @@ export class EquipementsComponent implements OnInit{
         this.route.params.subscribe(params => {
             this.clientId = params['id'];
             
-            this.http.get<Equipements[]>(`http://100.74.7.89:3000/materielleClient/${1}`).subscribe(equipement => {
+            this.http.get<Equipements[]>(`your_url:port/materielleClient/${1}`).subscribe(equipement => {
                 this.equipements = equipement;
                 console.log(equipement)
                 console.log(this.clientId)

@@ -79,7 +79,7 @@ mapTabToStatus(tab: 'all' | 'open' | 'doing' | 'closed'): string {
 }
 
   getTickets() {
-    this.http.get<Ticket[]>('http://100.74.7.89:3000/tickets').subscribe(data => {
+    this.http.get<Ticket[]>('your_url:port/tickets').subscribe(data => {
       this.tickets = data;
     });
   }

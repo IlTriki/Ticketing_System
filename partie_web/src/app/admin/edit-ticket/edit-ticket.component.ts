@@ -34,7 +34,7 @@ export class EditTicketComponent implements OnInit {
 
   getTicket() {
     if (this.ticketId !== null) {
-      this.http.get<Ticket>(`http://100.74.7.89:3000/tickets/${this.ticketId}`).subscribe(data => {
+      this.http.get<Ticket>(`your_url:port/tickets/${this.ticketId}`).subscribe(data => {
         this.ticket = data;
       });
     }
@@ -42,7 +42,7 @@ export class EditTicketComponent implements OnInit {
 
   updateTicket() {
     if (this.ticketId !== null && this.ticket !== null) {
-      this.http.put(`http://100.74.7.89:3000/tickets/${this.ticketId}`, this.ticket).subscribe(() => {
+      this.http.put(`your_url:port/tickets/${this.ticketId}`, this.ticket).subscribe(() => {
         alert('Ticket mis à jour avec succès');
         this.router.navigate(['/ticket-system']);
       });

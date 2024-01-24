@@ -35,7 +35,7 @@ export class ConversationComponent implements OnInit {
 
     this.route.params.subscribe(params => {
       this.ticketId = params['id'];
-      this.http.get<{sender: string, text: string}[]>(`http://100.74.7.89:3000/conversation/${this.ticketId}`).subscribe(messages => {
+      this.http.get<{sender: string, text: string}[]>(`your_url:port/conversation/${this.ticketId}`).subscribe(messages => {
         this.messages = messages;
       });
     });
@@ -43,7 +43,7 @@ export class ConversationComponent implements OnInit {
   
   sendMessage(): void {
     this.messages.push({sender: this.identity.displayName, text: this.newMessage});
-    this.http.post(`http://100.74.7.89:3000/conversation/${this.ticketId}`, {sender: this.identity.displayName, text: this.newMessage}).subscribe(() => {
+    this.http.post(`your_url:port/conversation/${this.ticketId}`, {sender: this.identity.displayName, text: this.newMessage}).subscribe(() => {
       this.newMessage = '';
     });
   }

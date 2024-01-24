@@ -22,7 +22,7 @@ export class CalendrierComponent implements OnInit {
   constructor(private http: HttpClient) {}
   
   ngOnInit(): void {
-    this.http.get<Ticket[]>('http://100.74.7.89:3000/rdv').subscribe(tickets => {
+    this.http.get<Ticket[]>('your_url:port/rdv').subscribe(tickets => {
       this.events = [];
       for (let ticket of tickets) {
         let date = new Date(ticket.DateRdv);
@@ -34,7 +34,7 @@ export class CalendrierComponent implements OnInit {
         });
       }
     });
-    this.http.get<any[]>('http://100.74.7.89:3000/nordv').subscribe(nordvs => {
+    this.http.get<any[]>('your_url:port/nordv').subscribe(nordvs => {
       this.nordvs = nordvs;
     });
   }
@@ -60,7 +60,7 @@ export class CalendrierComponent implements OnInit {
       description: this.nordvs[event.currentIndex].Probleme
     };
     
-    this.http.post('http://100.74.7.89:3000/rdv', newRdv).subscribe(
+    this.http.post('your_url:port/rdv', newRdv).subscribe(
       response => {
         console.log('Réponse du serveur', response);
         this.selectedDate = undefined; // Réinitialisez la date sélectionnée après le drop

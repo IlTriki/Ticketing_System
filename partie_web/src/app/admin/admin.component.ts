@@ -31,7 +31,7 @@ export class AdminComponent implements OnInit {
       (rolesParApp:any) => {
         rolesParApp.value.map((app:any) => {
           this.id =  app.appRoleId;
-          if(this.id != "4d2c506e-393b-48f0-a1d5-071ec67a8f1a"){
+          if(this.id != "your_app_role_id_here"){
             this.router.navigate([""]);
           }
         })

@@ -31,7 +31,7 @@ export class ClientComponent implements OnInit {
       (rolesParApp:any) => {
         rolesParApp.value.map((app:any) => {
           this.id =  app.appRoleId;
-          if(this.id != "69bc4d78-ee63-414f-a00b-724174266998"){
+          if(this.id != "your_app_role_id_here"){
             this.router.navigate([""]);
           }
         })
