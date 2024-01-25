@@ -53,9 +53,9 @@ The following tools were used in this project:
 - [Angular](https://angular.dev/)
 
 ## :eyes: Results ##
-![ecran](https://github.com/IlTriki/Ticketing_System/assets/73757905/e853265f-c7f1-4d78-9082-9ad996d50dda) | width=300
-![image1](https://github.com/IlTriki/Ticketing_System/assets/73757905/0dbb83b9-2255-41d5-b129-e308ffa005d6) | width=200
-![Screenshot_20240118-120539-portrait](https://github.com/IlTriki/Ticketing_System/assets/73757905/e2d750fb-f0c0-4abe-abc1-907967d6a0ff) | width=200
+![ecran](https://github.com/IlTriki/Ticketing_System/assets/73757905/e853265f-c7f1-4d78-9082-9ad996d50dda | width=300)
+![image1](https://github.com/IlTriki/Ticketing_System/assets/73757905/0dbb83b9-2255-41d5-b129-e308ffa005d6 | width=200) 
+![Screenshot_20240118-120539-portrait](https://github.com/IlTriki/Ticketing_System/assets/73757905/e2d750fb-f0c0-4abe-abc1-907967d6a0ff | width=200)
 
 ## :white_check_mark: Requirements ##
 
