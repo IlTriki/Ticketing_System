@@ -75,7 +75,7 @@ $ git clone https://github.com/IlTriki/Ticketing_System
 
 - <a href="https://github.com/IlTriki/" target="_blank">TRIKI Osama</a>
 - <a href="https://github.com/NathanChampes" target="_blank">CHAMPES Nathan</a>
-- <a href="https://github.com/nicolamenace" target="_blank">MADEC Nicolas</a>
+- <a href="https://github.com/mdcnico" target="_blank">MADEC Nicolas</a>
 - <a href="https://github.com/Wel7" target="_blank">HERGAT Hugo</a>
 
 &#xa0;
